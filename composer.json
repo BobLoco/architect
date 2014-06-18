@@ -9,9 +9,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {
-        "slim/slim": "2.*"
-    },
+    "require": {},
     "autoload": {
         "psr-0": {
             "Architect": "."
