@@ -1,0 +1,18 @@
+{
+    "name": "architect/architect",
+    "description": "The core architect structure",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BobLoco",
+            "email": "rob.lowcock@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-0": {
+            "Architect": "."
+        }
+    }
+}
