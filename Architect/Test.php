@@ -2,10 +2,10 @@
 
 namespace Architect;
 
-class Test
+class Test extends ArchitectAbstract
 {
-	public static function hello()
+	public function test2()
 	{
-		return "Hello world";
+		return array("Hi there");
 	}
 }
