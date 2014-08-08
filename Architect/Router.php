@@ -2,9 +2,10 @@
 
 namespace Architect;
 
-class Router extends ArchitectAbstract {
-	
-	public function routes($app) {
+class Router extends ArchitectAbstract
+{
+	public function routes($app)
+	{
 		$app->get('/:class/:function', function($class, $function) use ($app) {
 			$fullclass = '\\Architect\\' . ucfirst($class);
 			$loaded = new $fullclass();
