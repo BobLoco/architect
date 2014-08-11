@@ -4,9 +4,9 @@ namespace Architect;
 
 class Test extends ArchitectAbstract
 {
-	public function test2()
+	public function get($identifier)
 	{
-		$output = $this->getParams();
+		$output = array('id' => $identifier);
 
 		return $output;
 	}
