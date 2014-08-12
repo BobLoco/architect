@@ -10,7 +10,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "slim/slim": "2.*"
+        "slim/slim": "2.*",
+        "doctrine/orm": "2.4.*"
     },
     "autoload": {
         "psr-0": {
