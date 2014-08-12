@@ -11,7 +11,8 @@
     "minimum-stability": "dev",
     "require": {
         "slim/slim": "2.*",
-        "doctrine/orm": "2.4.*"
+        "doctrine/orm": "2.4.*",
+        "monolog/monolog": "1.*"
     },
     "autoload": {
         "psr-0": {
