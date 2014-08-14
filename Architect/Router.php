@@ -9,19 +9,19 @@ class Router extends ArchitectAbstract
 		$app->get('/:class/:identifier', function($class, $identifier) use ($app) {
 			$loaded = $this->_loadClass($class, $app);
 
-			echo json_encode($loaded->get($identifier));
+			echo json_encode($loaded->read($identifier));
 		});
 
 		$app->get('/:class', function ($class) use ($app) {
 			$loaded = $this->_loadClass($class, $app);
 
-			echo json_encode($loaded->all());
+			echo json_encode($loaded->read());
 		});
 
 		$app->put('/:class/:identifier', function($class, $identifier) use ($app) {
 			$loaded = $this->_loadClass($class, $app);
 
-			echo json_encode($loaded->edit($identifier));
+			echo json_encode($loaded->update($identifier));
 		});
 
 		$app->post('/:class', function($class) use ($app) {
@@ -38,10 +38,10 @@ class Router extends ArchitectAbstract
 	}
 
 	protected function _loadClass($class, $app) {
-		$fullclass = '\\Architect\\' . ucfirst($class);
+		$fullclass = '\\Architect\\Controllers\\' . ucfirst($class);
 
 		$app->contentType('application/json');
 
-		return new $fullclass();
+		return new $fullclass($app);
 	}
 }

@@ -6,6 +6,8 @@ abstract class ArchitectAbstract
 {
 	protected $_params = array();
 
+	protected static $_app;
+
 	public function setParams($params)
 	{
 		// @TODO: Add clean-up here
