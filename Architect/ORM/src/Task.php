@@ -1,4 +1,6 @@
 <?php
+namespace Architect\ORM\src;
+
 /**
  * @Entity @Table(name="tasks")
  */
