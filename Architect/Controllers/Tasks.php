@@ -11,7 +11,7 @@ class Tasks extends ControllerAbstract
 			$task = $this->_orm->find('\Architect\ORM\src\Task', $id);
 
 			if (empty($task)) {
-				throw new Exception('Task does not exist');
+				$this->_app->halt(404);
 			}
 
 			return array(
@@ -44,9 +44,48 @@ class Tasks extends ControllerAbstract
 		$this->_orm->persist($task);
 		$this->_orm->flush();
 
+		$this->_app->response->setStatus(201);
+		$this->_app->response->headers->set('Location', $this->_app->request->getPath() . '/' . $task->getId());
+
 		return array(
 			'success' => true,
 			'task_id' => $task->getId(),
+			'task_id' => $task->getName(),
+		);
+	}
+
+	public function update($id)
+	{
+		$task = $this->_orm->find('\Architect\ORM\src\Task', $id);
+
+		if (empty($task)) {
+			$this->_app->halt(404);
+		}
+
+		$task->setName($this->_app->request->put('name'));
+		$this->_orm->persist($task);
+		$this->_orm->flush();
+
+		return array(
+			'success' => true,
+			'task_id' => $task->getId(),
+			'name' => $task->getName(),
+		);
+	}
+
+	public function delete($id)
+	{
+		$task = $this->_orm->find('\Architect\ORM\src\Task', $id);
+
+		if (empty($task)) {
+			$this->_app->halt(404);
+		}
+
+		$this->_orm->remove($task);
+		$this->_orm->flush();
+
+		return array(
+			'success' => true,
 		);
 	}
 }

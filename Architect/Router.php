@@ -1,9 +1,22 @@
 <?php
-
 namespace Architect;
 
+/**
+ * Architect\Router
+ *
+ * Defines and runs the routes for Architect
+ *
+ * @category Core
+ * @package Architect
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 class Router extends ArchitectAbstract
 {
+	/**
+	 * Define the routes and return output for each REST method
+	 * @param  object $app
+	 * @return void
+	 */
 	public function routes($app)
 	{
 		$app->get('/:class/:identifier', function($class, $identifier) use ($app) {
@@ -37,8 +50,18 @@ class Router extends ArchitectAbstract
 		});
 	}
 
+	/**
+	 * Load a class based on the route recieved
+	 * @param  string $class
+	 * @param  object $app
+	 * @return object
+	 */
 	protected function _loadClass($class, $app) {
 		$fullclass = '\\Architect\\Controllers\\' . ucfirst($class);
+
+		if (!class_exists($fullclass)) {
+			$app->halt(404);
+		}
 
 		$app->contentType('application/json');
 
