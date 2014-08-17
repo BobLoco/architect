@@ -52,6 +52,12 @@ class Core extends ArchitectAbstract
 		self::$app->post('/:class', function($class) {
 			$loaded = $this->_loadClass($class);
 
+			$result = $loaded->create();
+
+			if ($result->getCode() === ResponseCode::OK) {
+				Core::$app->response->setStatus(201);
+			}
+
 			$this->_displayOutput($loaded->create());
 		});
 

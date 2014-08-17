@@ -65,7 +65,6 @@ class Tasks extends ControllerAbstract
 		$this->_orm->persist($task);
 		$this->_orm->flush();
 
-		Core::$app->response->setStatus(201);
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $task->getId());
 
 		return new Result(
