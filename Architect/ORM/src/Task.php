@@ -10,20 +10,23 @@ class Task
 	protected $task_id;
 
 	/** @Column(type="string") **/
-	protected $name;
+	protected $task_name;
+
+	/** @Column(type="datetime", nullable=true) **/
+	protected $completed;
 
 	public function getId()
 	{
 		return $this->task_id;
 	}
 
-	public function getName()
+	public function getTaskName()
 	{
-		return $this->name;
+		return $this->task_name;
 	}
 
-	public function setName($name)
+	public function setTaskName($task_name)
 	{
-		$this->name = $name;
+		$this->task_name = $task_name;
 	}
 }

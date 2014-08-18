@@ -34,7 +34,7 @@ class Tasks extends ControllerAbstract
 
 			return new Result(ResponseCode::OK, array(
 				'task_id' => $task->getId(),
-				'name' => $task->getName(),
+				'task_name' => $task->getTaskName(),
 			));
 		} else {
 			$repository = $this->_orm->getRepository('\Architect\ORM\src\Task');
@@ -45,7 +45,7 @@ class Tasks extends ControllerAbstract
 			foreach ($tasks as $task) {
 				$result[] = array(
 					'task_id' => $task->getId(),
-					'name' => $task->getName(),
+					'task_name' => $task->getTaskName(),
 				);
 			}
 
@@ -60,7 +60,7 @@ class Tasks extends ControllerAbstract
 	public function create()
 	{
 		$task = new Task();
-		$task->setName(Core::$app->request->post('name'));
+		$task->setName(Core::$app->request->post('task_name'));
 
 		$this->_orm->persist($task);
 		$this->_orm->flush();
@@ -71,7 +71,7 @@ class Tasks extends ControllerAbstract
 			ResponseCode::OK,
 			array(
 				'task_id' => $task->getId(),
-				'name' => $task->getName(),
+				'task_name' => $task->getTaskName(),
 			)
 		);
 	}
@@ -89,7 +89,7 @@ class Tasks extends ControllerAbstract
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$task->setName(Core::$app->request->put('name'));
+		$task->setTaskName(Core::$app->request->put('task_name'));
 		$this->_orm->persist($task);
 		$this->_orm->flush();
 
@@ -97,7 +97,7 @@ class Tasks extends ControllerAbstract
 			ResponseCode::OK,
 			array(
 				'task_id' => $task->getId(),
-				'name' => $task->getName(),
+				'task_name' => $task->getTaskName(),
 			)
 		);
 	}

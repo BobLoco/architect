@@ -15,7 +15,6 @@ use \Architect\ORM\EntityManager;
  */
 abstract class ControllerAbstract
 {
-	protected $_app;
 	protected $_orm;
 
 	/**
