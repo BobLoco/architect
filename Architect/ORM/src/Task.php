@@ -15,6 +15,12 @@ class Task
 	/** @Column(type="datetime", nullable=true) **/
 	protected $completed;
 
+	/**
+	 * @ManyToOne(targetEntity="Context", inversedBy="tasks")
+	 * @JoinColumn(name="context_id", referencedColumnName="context_id")
+	 */
+	private $context;
+
 	public function getId()
 	{
 		return $this->task_id;
@@ -28,5 +34,10 @@ class Task
 	public function setTaskName($task_name)
 	{
 		$this->task_name = $task_name;
+	}
+
+	public function getContext()
+	{
+		return $this->context;
 	}
 }

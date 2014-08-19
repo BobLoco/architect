@@ -1,6 +1,8 @@
 <?php
 namespace Architect\ORM\src;
 
+use \Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @Entity @Table(name="contexts")
  */
@@ -11,6 +13,16 @@ class Context
 
 	/** @Column(type="string") **/
 	protected $context_name;
+
+	/**
+	 * @OneToMany(targetEntity="Task", mappedBy="context")
+	 */
+	private $tasks;
+
+	public function __construct()
+	{
+		$this->tasks = new ArrayCollection;
+	}
 
 	public function getId()
 	{
@@ -25,5 +37,10 @@ class Context
 	public function setContextName($context_name)
 	{
 		return $this->context_name = $context_name;
+	}
+
+	public function getTasks()
+	{
+		return $this->tasks;
 	}
 }
