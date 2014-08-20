@@ -60,7 +60,7 @@ class Contexts extends ControllerAbstract
 	public function create()
 	{
 		$context = new Context();
-		$context->setName(Core::$app->request->post('context_name'));
+		$context->setContextName(Core::$app->request->post('context_name'));
 
 		$this->_orm->persist($context);
 		$this->_orm->flush();

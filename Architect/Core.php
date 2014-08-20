@@ -58,7 +58,7 @@ class Core extends ArchitectAbstract
 				Core::$app->response->setStatus(201);
 			}
 
-			$this->_displayOutput($loaded->create());
+			$this->_displayOutput($result);
 		});
 
 		self::$app->delete('/:class/:identifier', function($class, $identifier) {
@@ -100,7 +100,7 @@ class Core extends ArchitectAbstract
 
 		$data = $result->getData();
 
-		if (!empty($data)) {
+		if (isset($data)) {
 			echo json_encode($data);
 		}
 	}

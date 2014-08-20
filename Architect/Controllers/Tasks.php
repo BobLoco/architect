@@ -60,7 +60,7 @@ class Tasks extends ControllerAbstract
 	public function create()
 	{
 		$task = new Task();
-		$task->setName(Core::$app->request->post('task_name'));
+		$task->setTaskName(Core::$app->request->post('task_name'));
 
 		$this->_orm->persist($task);
 		$this->_orm->flush();
