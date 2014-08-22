@@ -32,9 +32,12 @@ class Tasks extends ControllerAbstract
 				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 			}
 
+			$completed = $task->getCompleted();
+
 			return new Result(ResponseCode::OK, array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
+				'completed' => !empty($completed) ? $completed : false,
 			));
 		} else {
 			$repository = $this->_orm->getRepository('\Architect\ORM\src\Task');
@@ -43,9 +46,12 @@ class Tasks extends ControllerAbstract
 			$result = array();
 
 			foreach ($tasks as $task) {
+				$completed = $task->getCompleted();
+
 				$result[] = array(
 					'task_id' => $task->getId(),
 					'task_name' => $task->getTaskName(),
+					'completed' => !empty($completed) ? $completed : false,
 				);
 			}
 
@@ -61,17 +67,21 @@ class Tasks extends ControllerAbstract
 	{
 		$task = new Task();
 		$task->setTaskName(Core::$app->request->post('task_name'));
+		$task->setCompleted(Core::$app->request->post('completed'));
 
 		$this->_orm->persist($task);
 		$this->_orm->flush();
 
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $task->getId());
 
+		$completed = $task->getCompleted();
+
 		return new Result(
 			ResponseCode::OK,
 			array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
+				'completed' => !empty($completed) ? $completed : false,
 			)
 		);
 	}
@@ -89,7 +99,18 @@ class Tasks extends ControllerAbstract
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$task->setTaskName(Core::$app->request->put('task_name'));
+		foreach (Core::$app->request->put() as $name => $value) {
+			var_dump($this->_camelcase($name));
+		}
+		die('done');
+
+		// $task_name = Core::$app->request->put('task_name');
+		// $completed = Core::$app->request->put('completed');
+
+		// if (!)
+
+		$task->setTaskName();
+		$task->setCompleted(Core::$app->request->put('completed'));
 		$this->_orm->persist($task);
 		$this->_orm->flush();
 
@@ -98,6 +119,7 @@ class Tasks extends ControllerAbstract
 			array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
+				'completed' => $task->getCompleted(),
 			)
 		);
 	}

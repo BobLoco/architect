@@ -31,13 +31,23 @@ class Task
 		return $this->task_name;
 	}
 
+	public function getContext()
+	{
+		return $this->context;
+	}
+
+	public function getCompleted()
+	{
+		return $this->completed;
+	}
+
 	public function setTaskName($task_name)
 	{
 		$this->task_name = $task_name;
 	}
 
-	public function getContext()
+	public function setCompleted($completed)
 	{
-		return $this->context;
+		$this->completed = $completed;
 	}
 }
