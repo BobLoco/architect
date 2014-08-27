@@ -48,6 +48,6 @@ class Task
 
 	public function setCompleted($completed)
 	{
-		$this->completed = $completed;
+		$this->completed = new \DateTime($completed);
 	}
 }
