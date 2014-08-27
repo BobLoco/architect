@@ -99,18 +99,28 @@ class Tasks extends ControllerAbstract
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
+		$context_id = Core::$app->request->put('context_id');
+
+		if (!empty($context_id)) {
+			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
+			$task->setContext($context);
+		}
+
 		$task->setTaskName(Core::$app->request->put('task_name'));
+
 		$task->setCompleted(Core::$app->request->put('completed'));
 		$this->_orm->persist($task);
 		$this->_orm->flush();
 
 		$completed = $task->getCompleted();
+		$context = $task->getContext();
 
 		return new Result(
 			ResponseCode::OK,
 			array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
+				'context' => !empty($context) ? $context->getContextName() : false,
 				'completed' => !empty($completed) ? $completed : false,
 			)
 		);

@@ -99,4 +99,9 @@ class Task
 	{
 		$this->completed = new \DateTime($completed);
 	}
+
+	public function setContext($context)
+	{
+		$this->context = $context;
+	}
 }
