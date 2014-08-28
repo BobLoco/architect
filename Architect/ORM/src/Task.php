@@ -97,8 +97,10 @@ class Task
 	 */
 	public function setCompleted($completed)
 	{
-		if (!empty($completed)) {
+		if (!empty($completed) && $completed !== 'false') {
 			$this->completed = new \DateTime($completed);
+		} else {
+			$this->completed = null;
 		}
 	}
 

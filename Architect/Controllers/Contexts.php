@@ -35,6 +35,7 @@ class Contexts extends ControllerAbstract
 			return new Result(ResponseCode::OK, array(
 				'context_id' => $context->getId(),
 				'context_name' => $context->getContextName(),
+				'tasks' => $this->_returnTasks($context->getTasks()),
 			));
 		} else {
 			$repository = $this->_orm->getRepository('\Architect\ORM\src\Context');
@@ -124,5 +125,20 @@ class Contexts extends ControllerAbstract
 				'success' => true,
 			)
 		);
+	}
+
+	private function _returnTasks($tasks)
+	{
+		$sorted_tasks = array();
+
+		foreach ($tasks as $task) {
+			$sorted_tasks[] = array(
+				'task_id' => $task->getId(),
+				'task_name' => $task->getTaskName(),
+				'completed' => $task->getCompleted(),
+			);
+		}
+
+		return $sorted_tasks;
 	}
 }
