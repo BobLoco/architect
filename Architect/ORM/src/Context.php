@@ -4,7 +4,7 @@ namespace Architect\ORM\src;
 use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @Entity @Table(name="contexts")
+ * @Entity @Table(name="context")
  */
 class Context
 {

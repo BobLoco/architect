@@ -1,10 +1,10 @@
 <?php
 namespace Architect\Controllers;
 
-use \Architect\Core;
-use \Architect\ORM\src\Task;
-use \Architect\ResponseCode;
-use \Architect\Result;
+use Architect\Core;
+use Architect\ORM\src\Task;
+use Architect\ResponseCode;
+use Architect\Result;
 
 /**
  * Architect\Controllers\Task
@@ -33,10 +33,12 @@ class Tasks extends ControllerAbstract
 			}
 
 			$completed = $task->getCompleted();
+			$context = $task->getContext();
 
 			return new Result(ResponseCode::OK, array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
+				'context' => !empty($context) ? $this->_returnContext($context) : false,
 				'completed' => !empty($completed) ? $completed : false,
 			));
 		} else {
@@ -47,10 +49,12 @@ class Tasks extends ControllerAbstract
 
 			foreach ($tasks as $task) {
 				$completed = $task->getCompleted();
+				$context = $task->getContext();
 
 				$result[] = array(
 					'task_id' => $task->getId(),
 					'task_name' => $task->getTaskName(),
+					'context' => !empty($context) ? $this->_returnContext($context) : false,
 					'completed' => !empty($completed) ? $completed : false,
 				);
 			}
@@ -69,6 +73,13 @@ class Tasks extends ControllerAbstract
 		$task->setTaskName(Core::$app->request->post('task_name'));
 		$task->setCompleted(Core::$app->request->post('completed'));
 
+		$context_id = Core::$app->request->post('context_id');
+
+		if (!empty($context_id)) {
+			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
+			$task->setContext($context);
+		}
+
 		$this->_orm->persist($task);
 		$this->_orm->flush();
 
@@ -81,6 +92,7 @@ class Tasks extends ControllerAbstract
 			array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
+				'context' => !empty($context) ? $this->_returnContext($context) : false,
 				'completed' => !empty($completed) ? $completed : false,
 			)
 		);
@@ -120,7 +132,7 @@ class Tasks extends ControllerAbstract
 			array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
-				'context' => !empty($context) ? $context->getContextName() : false,
+				'context' => !empty($context) ? $this->_returnContext($context) : false,
 				'completed' => !empty($completed) ? $completed : false,
 			)
 		);
@@ -147,6 +159,19 @@ class Tasks extends ControllerAbstract
 			array(
 				'success' => true,
 			)
+		);
+	}
+
+	/**
+	 * Format a context to return
+	 * @param  Architect\ORM\src\Context $context
+	 * @return array
+	 */
+	private function _returnContext($context)
+	{
+		return array(
+			'context_id' => $context->getId(),
+			'context_name' => $context->getContextName(),
 		);
 	}
 }

@@ -11,7 +11,7 @@ namespace Architect\ORM\src;
  * @subpackage ORM
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  * @Entity
- * @Table(name="tasks")
+ * @Table(name="task")
  */
 class Task
 {
@@ -41,7 +41,7 @@ class Task
 	/**
 	 * The context of the class
 	 * @var Architect\Orm\src\Context
-	 * @ManyToOne(targetEntity="Context", inversedBy="tasks")
+	 * @ManyToOne(targetEntity="Context", inversedBy="task")
 	 * @JoinColumn(name="context_id", referencedColumnName="context_id")
 	 */
 	private $context;
@@ -97,7 +97,9 @@ class Task
 	 */
 	public function setCompleted($completed)
 	{
-		$this->completed = new \DateTime($completed);
+		if (!empty($completed)) {
+			$this->completed = new \DateTime($completed);
+		}
 	}
 
 	public function setContext($context)
