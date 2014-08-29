@@ -2,51 +2,51 @@
 namespace Architect\Controllers;
 
 use \Architect\Core;
-use \Architect\ORM\src\Context;
+use \Architect\ORM\src\Project;
 use \Architect\ResponseCode;
 use \Architect\Result;
 
 /**
- * Architect\Controllers\Context
+ * Architect\Controllers\Project
  *
- * Contexts controler
+ * Projects controler
  *
  * @category Controllers
  * @package Architect
  * @subpackage Controllers
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
-class Contexts extends ControllerAbstract
+class Projects extends ControllerAbstract
 {
 	/**
-	 * Read a single context or list of contexts
+	 * Read a single project or list of projects
 	 * @param  int $id
 	 * @return array
 	 */
 	public function read($id = 0)
 	{
 		if (!empty($id)) {
-			$context = $this->_orm->find('\Architect\ORM\src\Context', $id);
+			$project = $this->_orm->find('\Architect\ORM\src\Project', $id);
 
-			if (empty($context)) {
+			if (empty($project)) {
 				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 			}
 
 			return new Result(ResponseCode::OK, array(
-				'context_id' => $context->getId(),
-				'context_name' => $context->getContextName(),
-				'tasks' => $this->_returnTasks($context->getTasks()),
+				'project_id' => $project->getId(),
+				'project_name' => $project->getProjectName(),
+				'tasks' => $this->_returnTasks($project->getTasks()),
 			));
 		} else {
-			$repository = $this->_orm->getRepository('\Architect\ORM\src\Context');
-			$contexts = $repository->findAll();
+			$repository = $this->_orm->getRepository('\Architect\ORM\src\Project');
+			$projects = $repository->findAll();
 
 			$result = array();
 
-			foreach ($contexts as $context) {
+			foreach ($projects as $project) {
 				$result[] = array(
-					'context_id' => $context->getId(),
-					'context_name' => $context->getContextName(),
+					'project_id' => $project->getId(),
+					'project_name' => $project->getProjectName(),
 				);
 			}
 
@@ -55,68 +55,68 @@ class Contexts extends ControllerAbstract
 	}
 
 	/**
-	 * Create a new context
+	 * Create a new project
 	 * @return array
 	 */
 	public function create()
 	{
-		$context = new Context();
-		$context->setContextName(Core::$app->request->post('context_name'));
+		$project = new Project();
+		$project->setProjectName(Core::$app->request->post('project_name'));
 
-		$this->_orm->persist($context);
+		$this->_orm->persist($project);
 		$this->_orm->flush();
 
-		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $context->getId());
+		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $project->getId());
 
 		return new Result(
 			ResponseCode::OK,
 			array(
-				'context_id' => $context->getId(),
-				'context_name' => $context->getContextName(),
+				'project_id' => $project->getId(),
+				'project_name' => $project->getProjectName(),
 			)
 		);
 	}
 
 	/**
-	 * Update a context
+	 * Update a project
 	 * @param  int $id
 	 * @return array
 	 */
 	public function update($id)
 	{
-		$context = $this->_orm->find('\Architect\ORM\src\Context', $id);
+		$project = $this->_orm->find('\Architect\ORM\src\Project', $id);
 
-		if (empty($context)) {
+		if (empty($project)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$context->setContextName(Core::$app->request->put('context_name'));
-		$this->_orm->persist($context);
+		$project->setProjectName(Core::$app->request->put('project_name'));
+		$this->_orm->persist($project);
 		$this->_orm->flush();
 
 		return new Result(
 			ResponseCode::OK,
 			array(
-				'context_id' => $context->getId(),
-				'context_name' => $context->getContextName(),
+				'project_id' => $project->getId(),
+				'project_name' => $project->getProjectName(),
 			)
 		);
 	}
 
 	/**
-	 * Delete a context
+	 * Delete a project
 	 * @param  int $id
 	 * @return array
 	 */
 	public function delete($id)
 	{
-		$context = $this->_orm->find('\Architect\ORM\src\Context', $id);
+		$project = $this->_orm->find('\Architect\ORM\src\Project', $id);
 
-		if (empty($context)) {
+		if (empty($project)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$this->_orm->remove($context);
+		$this->_orm->remove($project);
 		$this->_orm->flush();
 
 		return new Result(
@@ -128,7 +128,7 @@ class Contexts extends ControllerAbstract
 	}
 
 	/**
-	 * Process the tasks associated with the context
+	 * Process the tasks associated with the project
 	 * @param  ArrayCollection $tasks
 	 * @return array
 	 */

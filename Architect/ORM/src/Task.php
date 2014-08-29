@@ -32,6 +32,13 @@ class Task
 	protected $task_name;
 
 	/**
+	 * The datetime the task is due
+	 * @var DateTime
+	 * @Column(type="datetime", nullable=true)
+	 */
+	protected $due;
+
+	/**
 	 * The datetime the task was completed
 	 * @var DateTime
 	 * @Column(type="datetime", nullable=true)
@@ -39,12 +46,20 @@ class Task
 	protected $completed;
 
 	/**
-	 * The context of the class
+	 * The context of the task
 	 * @var Architect\Orm\src\Context
 	 * @ManyToOne(targetEntity="Context", inversedBy="task")
 	 * @JoinColumn(name="context_id", referencedColumnName="context_id")
 	 */
 	private $context;
+
+	/**
+	 * The project of the task
+	 * @var Architect\Orm\src\Project
+	 * @ManyToOne(targetEntity="Project", inversedBy="task")
+	 * @JoinColumn(name="project_id", referencedColumnName="project_id")
+	 */
+	private $project;
 
 	/**
 	 * Get the ID of the task
@@ -74,6 +89,24 @@ class Task
 	}
 
 	/**
+	 * Get the context of the class
+	 * @return Architect\Orm\src\Project
+	 */
+	public function getProject()
+	{
+		return $this->project;
+	}
+
+	/**
+	 * Get the date the task is due
+	 * @return DateTime
+	 */
+	public function getDue()
+	{
+		return $this->due;
+	}
+
+	/**
 	 * Get the date the task was completed
 	 * @return DateTime
 	 */
@@ -92,6 +125,19 @@ class Task
 	}
 
 	/**
+	 * Set the date the task is due
+	 * @param string $completed
+	 */
+	public function setdue($due)
+	{
+		if (!empty($due) && $due !== 'false') {
+			$this->due = new \DateTime($due);
+		} else {
+			$this->due = null;
+		}
+	}
+
+	/**
 	 * Set the date the task was completed
 	 * @param string $completed
 	 */
@@ -104,8 +150,21 @@ class Task
 		}
 	}
 
+	/**
+	 * Set the context of the task
+	 * @param Architect\Orm\src\Context $context
+	 */
 	public function setContext($context)
 	{
 		$this->context = $context;
+	}
+
+	/**
+	 * Set the project of the task
+	 * @param Architect\Orm\src\Project $project
+	 */
+	public function setProject($project)
+	{
+		$this->project = $project;
 	}
 }

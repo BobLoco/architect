@@ -4,39 +4,39 @@ namespace Architect\ORM\src;
 use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Architect\ORM\src\Context
+ * Architect\ORM\src\Project
  *
- * Context object for ORM
+ * Project object for ORM
  *
  * @category ORM
  * @package Architect
  * @subpackage ORM
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  * @Entity
- * @Table(name="context")
+ * @Table(name="project")
  */
-class Context
+class Project
 {
 	/** 
-	 * The ID of the context
+	 * The ID of the project
 	 * @var int
 	 * @Id
 	 * @Column(type="integer")
 	 * @GeneratedValue
 	 */
-	protected $context_id;
+	protected $project_id;
 
 	/**
-	 * The name of the context
+	 * The name of the project
 	 * @var string
 	 * @Column(type="string")
 	 */
-	protected $context_name;
+	protected $project_name;
 
 	/**
-	 * Tasks attached to the context
+	 * Tasks attached to the project
 	 * @var ArrayCollection
-	 * @OneToMany(targetEntity="Task", mappedBy="context")
+	 * @OneToMany(targetEntity="Task", mappedBy="project")
 	 */
 	private $tasks;
 
@@ -49,34 +49,34 @@ class Context
 	}
 
 	/**
-	 * Get the ID of the context
+	 * Get the ID of the project
 	 * @return int
 	 */
 	public function getId()
 	{
-		return $this->context_id;
+		return $this->project_id;
 	}
 
 	/**
-	 * Get the name of the context
+	 * Get the name of the project
 	 * @return string
 	 */
-	public function getContextName()
+	public function getProjectName()
 	{
-		return $this->context_name;
+		return $this->project_name;
 	}
 
 	/**
-	 * Set the name of the context
-	 * @param string $context_name
+	 * Set the name of the project
+	 * @param string $project_name
 	 */
-	public function setContextName($context_name)
+	public function setProjectName($project_name)
 	{
-		$this->context_name = $context_name;
+		$this->project_name = $project_name;
 	}
 
 	/**
-	 * Get the tasks associated with the context
+	 * Get the tasks associated with the project
 	 * @return ArrayCollection
 	 */
 	public function getTasks()
