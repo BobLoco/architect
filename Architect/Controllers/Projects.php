@@ -32,9 +32,12 @@ class Projects extends ControllerAbstract
 				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 			}
 
+			$context = $project->getContext();
+
 			return new Result(ResponseCode::OK, array(
 				'project_id' => $project->getId(),
 				'project_name' => $project->getProjectName(),
+				'context' => !empty($context) ? $context : false,
 				'tasks' => $this->_returnTasks($project->getTasks()),
 			));
 		} else {
@@ -44,9 +47,12 @@ class Projects extends ControllerAbstract
 			$result = array();
 
 			foreach ($projects as $project) {
+				$context = $project->getContext();
+
 				$result[] = array(
 					'project_id' => $project->getId(),
 					'project_name' => $project->getProjectName(),
+					'context' => !empty($context) ? $context : false,
 				);
 			}
 
@@ -62,6 +68,13 @@ class Projects extends ControllerAbstract
 	{
 		$project = new Project();
 		$project->setProjectName(Core::$app->request->post('project_name'));
+		$context_id = Core::$app->request->post('context_id');
+
+		// @TODO: This should be nullable
+		if (!empty($context_id)) {
+			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
+			$project->setContext($context);
+		}
 
 		$this->_orm->persist($project);
 		$this->_orm->flush();
@@ -88,6 +101,14 @@ class Projects extends ControllerAbstract
 
 		if (empty($project)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+		}
+
+		$context_id = Core::$app->request->post('context_id');
+
+		// @TODO: This should be nullable
+		if (!empty($context_id)) {
+			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
+			$project->setContext($context);
 		}
 
 		$project->setProjectName(Core::$app->request->put('project_name'));

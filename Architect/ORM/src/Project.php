@@ -34,6 +34,14 @@ class Project
 	protected $project_name;
 
 	/**
+	 * The context of the task
+	 * @var Architect\Orm\src\Context
+	 * @ManyToOne(targetEntity="Context", inversedBy="task")
+	 * @JoinColumn(name="context_id", referencedColumnName="context_id")
+	 */
+	private $context;
+
+	/**
 	 * Tasks attached to the project
 	 * @var ArrayCollection
 	 * @OneToMany(targetEntity="Task", mappedBy="project")
@@ -64,6 +72,24 @@ class Project
 	public function getProjectName()
 	{
 		return $this->project_name;
+	}
+
+	/**
+	 * Get the context of the class
+	 * @return Architect\Orm\src\Context
+	 */
+	public function getContext()
+	{
+		return $this->context;
+	}
+
+	/**
+	 * Set the context of the task
+	 * @param Architect\Orm\src\Context $context
+	 */
+	public function setContext(Context $context)
+	{
+		$this->context = $context;
 	}
 
 	/**

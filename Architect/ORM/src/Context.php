@@ -41,6 +41,13 @@ class Context
 	private $tasks;
 
 	/**
+	 * Projects attached to the context
+	 * @var ArrayCollection
+	 * @OneToMany(targetEntity="Project", mappedBy="context")
+	 */
+	private $projects;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -82,5 +89,14 @@ class Context
 	public function getTasks()
 	{
 		$this->tasks;
+	}
+
+	/**
+	 * Get the projects associated with the context
+	 * @return ArrayCollection
+	 */
+	public function getProjects()
+	{
+		$this->projects;
 	}
 }
