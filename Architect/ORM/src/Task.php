@@ -154,7 +154,7 @@ class Task
 	 * Set the context of the task
 	 * @param Architect\Orm\src\Context $context
 	 */
-	public function setContext(Context $context)
+	public function setContext($context)
 	{
 		$this->context = $context;
 	}
@@ -163,7 +163,7 @@ class Task
 	 * Set the project of the task
 	 * @param Architect\Orm\src\Project $project
 	 */
-	public function setProject(Project $project)
+	public function setProject($project)
 	{
 		$this->project = $project;
 	}

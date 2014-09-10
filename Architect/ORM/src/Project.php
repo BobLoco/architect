@@ -87,7 +87,7 @@ class Project
 	 * Set the context of the task
 	 * @param Architect\Orm\src\Context $context
 	 */
-	public function setContext(Context $context)
+	public function setContext($context)
 	{
 		$this->context = $context;
 	}

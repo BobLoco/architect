@@ -126,24 +126,4 @@ class Contexts extends ControllerAbstract
 			)
 		);
 	}
-
-	/**
-	 * Process the tasks associated with the context
-	 * @param  ArrayCollection $tasks
-	 * @return array
-	 */
-	private function _returnTasks($tasks)
-	{
-		$sorted_tasks = array();
-
-		foreach ($tasks as $task) {
-			$sorted_tasks[] = array(
-				'task_id' => $task->getId(),
-				'task_name' => $task->getTaskName(),
-				'completed' => $task->getCompleted(),
-			);
-		}
-
-		return $sorted_tasks;
-	}
 }

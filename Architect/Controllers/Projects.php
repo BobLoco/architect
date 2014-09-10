@@ -70,11 +70,13 @@ class Projects extends ControllerAbstract
 		$project->setProjectName(Core::$app->request->post('project_name'));
 		$context_id = Core::$app->request->post('context_id');
 
-		// @TODO: This should be nullable
 		if (!empty($context_id)) {
 			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
-			$project->setContext($context);
+		} else {
+			$context = null;
 		}
+
+		$project->setContext($context);
 
 		$this->_orm->persist($project);
 		$this->_orm->flush();
@@ -105,11 +107,13 @@ class Projects extends ControllerAbstract
 
 		$context_id = Core::$app->request->post('context_id');
 
-		// @TODO: This should be nullable
 		if (!empty($context_id)) {
 			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
-			$project->setContext($context);
+		} else {
+			$context = null;
 		}
+
+		$project->setContext($context);
 
 		$project->setProjectName(Core::$app->request->put('project_name'));
 		$this->_orm->persist($project);
@@ -146,25 +150,5 @@ class Projects extends ControllerAbstract
 				'success' => true,
 			)
 		);
-	}
-
-	/**
-	 * Process the tasks associated with the project
-	 * @param  ArrayCollection $tasks
-	 * @return array
-	 */
-	private function _returnTasks($tasks)
-	{
-		$sorted_tasks = array();
-
-		foreach ($tasks as $task) {
-			$sorted_tasks[] = array(
-				'task_id' => $task->getId(),
-				'task_name' => $task->getTaskName(),
-				'completed' => $task->getCompleted(),
-			);
-		}
-
-		return $sorted_tasks;
 	}
 }

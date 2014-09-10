@@ -133,11 +133,15 @@ class Tasks extends ControllerAbstract
 		if (!empty($context_id)) {
 			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
 			$task->setContext($context);
+		} else {
+			$task->setContext(null);
 		}
 
 		if (!empty($project_id)) {
 			$project = $this->_orm->find('\Architect\ORM\src\Project', $project_id);
 			$task->setProject($project);
+		} else {
+			$task->setProject(null);
 		}
 
 		$task->setTaskName(Core::$app->request->put('task_name'));
