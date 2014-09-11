@@ -35,7 +35,6 @@ class Context
 
 	/**
 	 * Tasks attached to the context
-	 * @var ArrayCollection
 	 * @OneToMany(targetEntity="Task", mappedBy="context")
 	 */
 	private $tasks;
@@ -88,7 +87,7 @@ class Context
 	 */
 	public function getTasks()
 	{
-		$this->tasks;
+		return $this->tasks;
 	}
 
 	/**
@@ -97,6 +96,6 @@ class Context
 	 */
 	public function getProjects()
 	{
-		$this->projects;
+		return $this->projects;
 	}
 }

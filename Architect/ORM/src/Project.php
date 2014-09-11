@@ -107,6 +107,6 @@ class Project
 	 */
 	public function getTasks()
 	{
-		$this->tasks;
+		return $this->tasks;
 	}
 }
