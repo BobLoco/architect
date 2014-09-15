@@ -39,6 +39,8 @@ class Projects extends ControllerAbstract
 				'project_name' => $project->getProjectName(),
 				'context' => !empty($context) ? $context : false,
 				'tasks' => $this->_returnTasks($project->getTasks()),
+				'created' => $project->getCreated(),
+				'updated' => $project->getUpdated(),
 			));
 		} else {
 			$repository = $this->_orm->getRepository('\Architect\ORM\src\Project');
@@ -53,6 +55,8 @@ class Projects extends ControllerAbstract
 					'project_id' => $project->getId(),
 					'project_name' => $project->getProjectName(),
 					'context' => !empty($context) ? $context : false,
+					'created' => $project->getCreated(),
+					'updated' => $project->getUpdated(),
 				);
 			}
 
@@ -77,6 +81,8 @@ class Projects extends ControllerAbstract
 		}
 
 		$project->setContext($context);
+		$project->setCreated();
+		$project->setUpdated();
 
 		$this->_orm->persist($project);
 		$this->_orm->flush();
@@ -114,6 +120,7 @@ class Projects extends ControllerAbstract
 		}
 
 		$project->setContext($context);
+		$project->setUpdated();
 
 		$project->setProjectName(Core::$app->request->put('project_name'));
 		$this->_orm->persist($project);

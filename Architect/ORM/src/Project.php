@@ -49,6 +49,20 @@ class Project
 	private $tasks;
 
 	/**
+	 * Created timestamp
+	 * @var DateTime
+	 * @Column(type="datetime")
+	 */
+	private $created;
+
+	/**
+	 * Updated timestamp
+	 * @var DateTime
+	 * @Column(type="datetime")
+	 */
+	private $updated;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -108,5 +122,39 @@ class Project
 	public function getTasks()
 	{
 		return $this->tasks;
+	}
+
+	/**
+	 * Set the updated date
+	 */
+	public function setUpdated()
+	{
+		$this->updated = new \DateTime();
+	}
+
+	/**
+	 * Set the created date
+	 */
+	public function setCreated()
+	{
+		$this->created = new \DateTime();
+	}
+
+	/**
+	 * Get the updated date
+	 * @return DateTime
+	 */
+	public function getUpdated()
+	{
+		return $this->updated;
+	}
+
+	/**
+	 * Get the created date
+	 * @return DateTime
+	 */
+	public function getCreated()
+	{
+		return $this->created;
 	}
 }
