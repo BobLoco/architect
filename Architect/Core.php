@@ -101,7 +101,9 @@ class Core extends ArchitectAbstract
 		$data = $result->getData();
 
 		if (isset($data)) {
-			echo json_encode($data);
+			$response = self::$app->response();
+			$response->header('Access-Control-Allow-Origin', '*');
+			$response->write(json_encode($data));
 		}
 	}
 }
