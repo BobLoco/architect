@@ -37,6 +37,7 @@ class Projects extends ControllerAbstract
 			return new Result(ResponseCode::OK, array(
 				'project_id' => $project->getId(),
 				'project_name' => $project->getProjectName(),
+				'project_description' => $project->getProjectDescription(),
 				'context' => !empty($context) ? $context : false,
 				'tasks' => $this->_returnTasks($project->getTasks()),
 				'created' => $project->getCreated(),
@@ -54,6 +55,7 @@ class Projects extends ControllerAbstract
 				$result[] = array(
 					'project_id' => $project->getId(),
 					'project_name' => $project->getProjectName(),
+					'project_description' => $project->getProjectDescription(),
 					'context' => !empty($context) ? $context : false,
 					'created' => $project->getCreated(),
 					'updated' => $project->getUpdated(),
@@ -72,6 +74,7 @@ class Projects extends ControllerAbstract
 	{
 		$project = new Project();
 		$project->setProjectName(Core::$app->request->post('project_name'));
+		$project->setProjectDescription(Core::$app->request->post('project_description'));
 		$context_id = Core::$app->request->post('context_id');
 
 		if (!empty($context_id)) {
@@ -123,6 +126,7 @@ class Projects extends ControllerAbstract
 		$project->setUpdated();
 
 		$project->setProjectName(Core::$app->request->put('project_name'));
+		$project->setProjectDescription(Core::$app->request->post('project_description'));
 		$this->_orm->persist($project);
 		$this->_orm->flush();
 

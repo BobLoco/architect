@@ -34,6 +34,13 @@ class Project
 	protected $project_name;
 
 	/**
+	 * The description / goal of the project
+	 * @var string
+	 * @Column(type="string", nullable=true)
+	 */
+	protected $project_description;
+
+	/**
 	 * The context of the task
 	 * @var Architect\Orm\src\Context
 	 * @ManyToOne(targetEntity="Context", inversedBy="task")
@@ -89,6 +96,15 @@ class Project
 	}
 
 	/**
+	 * Get the description of the project
+	 * @return string
+	 */
+	public function getProjectDescription()
+	{
+		return $this->project_description;
+	}
+
+	/**
 	 * Get the context of the class
 	 * @return Architect\Orm\src\Context
 	 */
@@ -113,6 +129,15 @@ class Project
 	public function setProjectName($project_name)
 	{
 		$this->project_name = $project_name;
+	}
+
+	/**
+	 * Set the description of the project
+	 * @param string $project_description
+	 */
+	public function setProjectDescription($project_description)
+	{
+		$this->project_description = $project_description;
 	}
 
 	/**

@@ -37,10 +37,21 @@ abstract class ControllerAbstract
 
 		if (!empty($tasks)) {
 			foreach ($tasks as $task) {
+				$context = $task->getContext();
+				$project = $task->getProject();
+
 				$sorted_tasks[] = array(
 					'task_id' => $task->getId(),
 					'task_name' => $task->getTaskName(),
 					'completed' => $task->getCompleted(),
+					'context' => array(
+						'context_id' => $context->getId(),
+						'context_name' => $context->getContextName(),
+					),
+					'project' => array(
+						'project_id' => $project->getId(),
+						'project_name' => $project->getProjectName(),
+					),
 				);
 			}
 		}
