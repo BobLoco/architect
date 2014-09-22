@@ -114,7 +114,7 @@ class Projects extends ControllerAbstract
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$context_id = Core::$app->request->post('context_id');
+		$context_id = Core::$app->request->put('context_id');
 
 		if (!empty($context_id)) {
 			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
@@ -126,7 +126,7 @@ class Projects extends ControllerAbstract
 		$project->setUpdated();
 
 		$project->setProjectName(Core::$app->request->put('project_name'));
-		$project->setProjectDescription(Core::$app->request->post('project_description'));
+		$project->setProjectDescription(Core::$app->request->put('project_description'));
 		$this->_orm->persist($project);
 		$this->_orm->flush();
 
