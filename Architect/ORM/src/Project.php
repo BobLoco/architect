@@ -52,6 +52,7 @@ class Project
 	 * Tasks attached to the project
 	 * @var ArrayCollection
 	 * @OneToMany(targetEntity="Task", mappedBy="project")
+	 * @OrderBy({"order" = "ASC"})
 	 */
 	private $tasks;
 

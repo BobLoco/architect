@@ -62,6 +62,13 @@ class Task
 	private $project;
 
 	/**
+	 * The order of the task
+	 * @var int
+	 * @Column(type="integer", nullable=true)
+	 */
+	private $order;
+
+	/**
 	 * Get the ID of the task
 	 * @return int
 	 */
@@ -116,6 +123,15 @@ class Task
 	}
 
 	/**
+	 * Get the order of the task within the project
+	 * @return int
+	 */
+	public function getOrder()
+	{
+		return $this->order;
+	}
+
+	/**
 	 * Set the task name
 	 * @param string $task_name
 	 */
@@ -166,5 +182,14 @@ class Task
 	public function setProject($project)
 	{
 		$this->project = $project;
+	}
+
+	/**
+	 * Set the order of the task within the project
+	 * @param int $order
+	 */
+	public function setOrder($order)
+	{
+		$this->order = (int) $order;
 	}
 }
