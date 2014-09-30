@@ -128,7 +128,7 @@ class Task
 	 * Set the date the task is due
 	 * @param string $completed
 	 */
-	public function setdue($due)
+	public function setDue($due)
 	{
 		if (!empty($due) && $due !== 'false') {
 			$this->due = new \DateTime($due);

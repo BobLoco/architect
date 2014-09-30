@@ -20,13 +20,13 @@ class Tasks extends ControllerAbstract
 {
 	/**
 	 * Read a single task or list of tasks
-	 * @param  int $id
+	 * @param  int $task_id
 	 * @return array
 	 */
-	public function read($id = 0)
+	public function read($task_id = 0)
 	{
-		if (!empty($id)) {
-			$task = $this->_orm->find('\Architect\ORM\src\Task', $id);
+		if (!empty($task_id)) {
+			$task = $this->_orm->find('\Architect\ORM\src\Task', $task_id);
 
 			if (empty($task)) {
 				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
@@ -109,6 +109,7 @@ class Tasks extends ControllerAbstract
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
 				'context' => !empty($context) ? $this->_returnContext($context) : false,
+				'due' => !empty($due) ? $due : false,
 				'completed' => !empty($completed) ? $completed : false,
 			)
 		);
@@ -116,12 +117,12 @@ class Tasks extends ControllerAbstract
 
 	/**
 	 * Update a task
-	 * @param  int $id
+	 * @param  int $task_id
 	 * @return array
 	 */
-	public function update($id)
+	public function update($task_id)
 	{
-		$task = $this->_orm->find('\Architect\ORM\src\Task', $id);
+		$task = $this->_orm->find('\Architect\ORM\src\Task', $task_id);
 
 		if (empty($task)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
@@ -171,12 +172,12 @@ class Tasks extends ControllerAbstract
 
 	/**
 	 * Delete a task
-	 * @param  int $id
+	 * @param  int $task_id
 	 * @return array
 	 */
-	public function delete($id)
+	public function delete($task_id)
 	{
-		$task = $this->_orm->find('\Architect\ORM\src\Task', $id);
+		$task = $this->_orm->find('\Architect\ORM\src\Task', $task_id);
 
 		if (empty($task)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
