@@ -34,6 +34,13 @@ class Project
 	protected $project_name;
 
 	/**
+	 * The description / goal of the project
+	 * @var string
+	 * @Column(type="string", nullable=true)
+	 */
+	protected $project_description;
+
+	/**
 	 * The context of the task
 	 * @var Architect\Orm\src\Context
 	 * @ManyToOne(targetEntity="Context", inversedBy="task")
@@ -45,8 +52,23 @@ class Project
 	 * Tasks attached to the project
 	 * @var ArrayCollection
 	 * @OneToMany(targetEntity="Task", mappedBy="project")
+	 * @OrderBy({"order" = "ASC"})
 	 */
 	private $tasks;
+
+	/**
+	 * Created timestamp
+	 * @var DateTime
+	 * @Column(type="datetime")
+	 */
+	private $created;
+
+	/**
+	 * Updated timestamp
+	 * @var DateTime
+	 * @Column(type="datetime")
+	 */
+	private $updated;
 
 	/**
 	 * Constructor
@@ -72,6 +94,15 @@ class Project
 	public function getProjectName()
 	{
 		return $this->project_name;
+	}
+
+	/**
+	 * Get the description of the project
+	 * @return string
+	 */
+	public function getProjectDescription()
+	{
+		return $this->project_description;
 	}
 
 	/**
@@ -102,11 +133,54 @@ class Project
 	}
 
 	/**
+	 * Set the description of the project
+	 * @param string $project_description
+	 */
+	public function setProjectDescription($project_description)
+	{
+		$this->project_description = $project_description;
+	}
+
+	/**
 	 * Get the tasks associated with the project
 	 * @return ArrayCollection
 	 */
 	public function getTasks()
 	{
 		return $this->tasks;
+	}
+
+	/**
+	 * Set the updated date
+	 */
+	public function setUpdated()
+	{
+		$this->updated = new \DateTime();
+	}
+
+	/**
+	 * Set the created date
+	 */
+	public function setCreated()
+	{
+		$this->created = new \DateTime();
+	}
+
+	/**
+	 * Get the updated date
+	 * @return DateTime
+	 */
+	public function getUpdated()
+	{
+		return $this->updated;
+	}
+
+	/**
+	 * Get the created date
+	 * @return DateTime
+	 */
+	public function getCreated()
+	{
+		return $this->created;
 	}
 }

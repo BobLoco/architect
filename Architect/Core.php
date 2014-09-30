@@ -66,6 +66,12 @@ class Core extends ArchitectAbstract
 
 			$this->_displayOutput($loaded->delete($identifier));
 		});
+
+		self::$app->options('/(:name+)', function(){
+			self::$app->response()->header('Access-Control-Allow-Origin', '*');
+			self::$app->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+			self::$app->response()->header('Access-Control-Allow-Headers', 'Content-Type');
+		});
 	}
 
 	/**
@@ -101,7 +107,9 @@ class Core extends ArchitectAbstract
 		$data = $result->getData();
 
 		if (isset($data)) {
-			echo json_encode($data);
+			$response = self::$app->response();
+			$response->header('Access-Control-Allow-Origin', '*');
+			$response->write(json_encode($data));
 		}
 	}
 }
