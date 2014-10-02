@@ -88,8 +88,6 @@ class Core extends ArchitectAbstract
 			self::$app->halt(404);
 		}
 
-		self::$app->contentType('application/json');
-
 		return new $fullclass();
 	}
 
