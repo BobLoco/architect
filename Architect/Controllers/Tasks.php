@@ -9,7 +9,7 @@ use Architect\Result;
 /**
  * Architect\Controllers\Task
  *
- * Tasks controler
+ * Tasks controller
  *
  * @category Controllers
  * @package Architect
