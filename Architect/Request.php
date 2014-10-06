@@ -4,15 +4,15 @@ namespace Architect;
 use \Architect\ORM\EntityManager;
 
 /**
- * Architect\Access
+ * Architect\Request
  *
  * Security and access layer
  *
- * @category Access
+ * @category Request
  * @package Architect
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
-class Access {
+class Request {
 
 	/**
 	 * Master key
@@ -20,10 +20,21 @@ class Access {
 	const MASTER = '1392efdc4a7dd3808f33940250f624fd';
 
 	/**
+	 * [$request_data description]
+	 * @var array
+	 */
+	public $request_data = array();
+
+	public function __construct()
+	{
+		// $this->request_data = ;
+	}
+
+	/**
 	 * Validate the request
 	 * @return boolean Whether the request is valid
 	 */
-	public function validateRequest()
+	public function validate()
 	{
 		$params = \Architect\Core::$app->request()->params();
 
