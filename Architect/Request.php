@@ -20,14 +20,17 @@ class Request {
 	const MASTER = '1392efdc4a7dd3808f33940250f624fd';
 
 	/**
-	 * [$request_data description]
+	 * The request data
 	 * @var array
 	 */
-	public $request_data = array();
+	private $request_data = array();
 
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
-		// $this->request_data = ;
+		$this->request_data = \Architect\Core::$app->request()->getBody();
 	}
 
 	/**
@@ -45,6 +48,7 @@ class Request {
 		$secret = $params['secret'];
 
 		if ($secret == self::MASTER) {
+			\Architect\Core::$app->response()->header('Access-Control-Allow-Origin', '*');
 			return true;
 		} else {
 			if (empty($params['app_id'])) {
@@ -70,6 +74,20 @@ class Request {
 			} else {
 				throw new \Exception('Invalid credentials');
 			}
+		}
+	}
+
+	/**
+	 * Retrieve an individual parameter
+	 * @param  string $param The parameter to retrieve
+	 * @return mixed The parameter value
+	 */
+	public function get($param)
+	{
+		if (in_array($param, array_keys($this->request_data))) {
+			return $this->request_data[$param];
+		} else {
+			return false;
 		}
 	}
 }

@@ -22,6 +22,7 @@ class Core extends ArchitectAbstract
 	public function __construct()
 	{
 		self::$app = new Slim();
+		self::$app->add(new \Slim\Middleware\ContentTypes());
 	}
 
 	/**

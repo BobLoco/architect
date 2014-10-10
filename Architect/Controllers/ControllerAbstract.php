@@ -2,6 +2,7 @@
 namespace Architect\Controllers;
 
 use \Architect\ORM\EntityManager;
+use \Architect\Request;
 
 /**
  * Architect\Controllers\ControllerAbstract
@@ -17,6 +18,8 @@ abstract class ControllerAbstract
 {
 	protected $_orm;
 
+	protected $_request;
+
 	/**
 	 * Constructor
 	 */
@@ -24,6 +27,7 @@ abstract class ControllerAbstract
 	{
 		$entity_manager = new EntityManager();
 		$this->_orm = $entity_manager->createManager();
+		$this->_request = new Request();
 	}
 
 	/**

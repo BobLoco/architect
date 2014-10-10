@@ -5,6 +5,7 @@ use \Architect\Core;
 use \Architect\ORM\src\Project;
 use \Architect\ResponseCode;
 use \Architect\Result;
+use \Architect\Request;
 
 /**
  * Architect\Controllers\Project
@@ -114,7 +115,7 @@ class Projects extends ControllerAbstract
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$context_id = Core::$app->request->put('context_id');
+		$context_id = $this->_request->get('context_id');
 
 		if (!empty($context_id)) {
 			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
@@ -125,8 +126,8 @@ class Projects extends ControllerAbstract
 		$project->setContext($context);
 		$project->setUpdated();
 
-		$project->setProjectName(Core::$app->request->put('project_name'));
-		$project->setProjectDescription(Core::$app->request->put('project_description'));
+		$project->setProjectName($this->_request->get('project_name'));
+		$project->setProjectDescription($this->_request->get('project_description'));
 		$this->_orm->persist($project);
 		$this->_orm->flush();
 
