@@ -39,6 +39,7 @@ class Request {
 	 */
 	public function validate()
 	{
+		// Grab the parameters from the request
 		$params = \Architect\Core::$app->request()->params();
 
 		if (empty($params['secret'])) {

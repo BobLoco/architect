@@ -74,9 +74,9 @@ class Projects extends ControllerAbstract
 	public function create()
 	{
 		$project = new Project();
-		$project->setProjectName(Core::$app->request->post('project_name'));
-		$project->setProjectDescription(Core::$app->request->post('project_description'));
-		$context_id = Core::$app->request->post('context_id');
+		$project->setProjectName($this->_request->get('project_name'));
+		$project->setProjectDescription($this->_request->get('project_description'));
+		$context_id = $this->_request->get('context_id');
 
 		if (!empty($context_id)) {
 			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
