@@ -12,17 +12,12 @@
     "require": {
         "slim/slim": "2.*",
         "doctrine/orm": "2.4.*",
-        "monolog/monolog": "1.*",
-        "phpspec/phpspec": "~2.0"
-    },
-    "config": {
-        "bin-dir": "bin"
+        "monolog/monolog": "1.*"
     },
     "autoload": {
         "psr-0": {
             "Architect": ".",
-            "Slim": ".",
-            "": "src"
+            "Slim": "."
         }
     }
 }
