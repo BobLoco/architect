@@ -3,6 +3,7 @@ namespace Architect\Controllers;
 
 use \Architect\ORM\EntityManager;
 use \Architect\Request;
+use \Pimple\Container;
 
 /**
  * Architect\Controllers\ControllerAbstract
@@ -16,9 +17,11 @@ use \Architect\Request;
  */
 abstract class ControllerAbstract
 {
-	protected $_orm;
+	protected $orm;
 
-	protected $_request;
+	protected $request;
+
+	protected $container;
 
 	/**
 	 * Constructor
@@ -26,8 +29,13 @@ abstract class ControllerAbstract
 	public function __construct()
 	{
 		$entity_manager = new EntityManager();
-		$this->_orm = $entity_manager->createManager();
-		$this->_request = new Request();
+		$this->orm = $entity_manager->createManager();
+		$this->request = new Request();
+		$this->container = new Container();
+
+		$this->container['request'] = function ($container) {
+			return new Request();
+		};
 	}
 
 	/**

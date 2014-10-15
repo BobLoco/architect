@@ -27,7 +27,7 @@ class Projects extends ControllerAbstract
 	public function read($id = 0)
 	{
 		if (!empty($id)) {
-			$project = $this->_orm->find('\Architect\ORM\src\Project', $id);
+			$project = $this->orm->find('\Architect\ORM\src\Project', $id);
 
 			if (empty($project)) {
 				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
@@ -45,7 +45,7 @@ class Projects extends ControllerAbstract
 				'updated' => $project->getUpdated(),
 			));
 		} else {
-			$repository = $this->_orm->getRepository('\Architect\ORM\src\Project');
+			$repository = $this->orm->getRepository('\Architect\ORM\src\Project');
 			$projects = $repository->findAll();
 
 			$result = array();
@@ -74,12 +74,12 @@ class Projects extends ControllerAbstract
 	public function create()
 	{
 		$project = new Project();
-		$project->setProjectName($this->_request->get('project_name'));
-		$project->setProjectDescription($this->_request->get('project_description'));
-		$context_id = $this->_request->get('context_id');
+		$project->setProjectName($this->container['request']->get('project_name'));
+		$project->setProjectDescription($this->container['request']->get('project_description'));
+		$context_id = $this->container['request']->get('context_id');
 
 		if (!empty($context_id)) {
-			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
+			$context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
 		} else {
 			$context = null;
 		}
@@ -88,8 +88,8 @@ class Projects extends ControllerAbstract
 		$project->setCreated();
 		$project->setUpdated();
 
-		$this->_orm->persist($project);
-		$this->_orm->flush();
+		$this->orm->persist($project);
+		$this->orm->flush();
 
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $project->getId());
 
@@ -109,16 +109,16 @@ class Projects extends ControllerAbstract
 	 */
 	public function update($id)
 	{
-		$project = $this->_orm->find('\Architect\ORM\src\Project', $id);
+		$project = $this->orm->find('\Architect\ORM\src\Project', $id);
 
 		if (empty($project)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$context_id = $this->_request->get('context_id');
+		$context_id = $this->container['request']->get('context_id');
 
 		if (!empty($context_id)) {
-			$context = $this->_orm->find('\Architect\ORM\src\Context', $context_id);
+			$context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
 		} else {
 			$context = null;
 		}
@@ -126,10 +126,10 @@ class Projects extends ControllerAbstract
 		$project->setContext($context);
 		$project->setUpdated();
 
-		$project->setProjectName($this->_request->get('project_name'));
-		$project->setProjectDescription($this->_request->get('project_description'));
-		$this->_orm->persist($project);
-		$this->_orm->flush();
+		$project->setProjectName($this->container['request']->get('project_name'));
+		$project->setProjectDescription($this->container['request']->get('project_description'));
+		$this->orm->persist($project);
+		$this->orm->flush();
 
 		return new Result(
 			ResponseCode::OK,
@@ -147,14 +147,14 @@ class Projects extends ControllerAbstract
 	 */
 	public function delete($id)
 	{
-		$project = $this->_orm->find('\Architect\ORM\src\Project', $id);
+		$project = $this->orm->find('\Architect\ORM\src\Project', $id);
 
 		if (empty($project)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$this->_orm->remove($project);
-		$this->_orm->flush();
+		$this->orm->remove($project);
+		$this->orm->flush();
 
 		return new Result(
 			ResponseCode::OK,

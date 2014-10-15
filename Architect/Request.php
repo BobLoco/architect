@@ -31,6 +31,12 @@ class Request {
 	public function __construct()
 	{
 		$this->request_data = \Architect\Core::$app->request()->getBody();
+
+		// If the middleware didn't get it, do parse_str on the content
+		// @TODO - convert this to custom middleware
+		if (!is_array($this->request_data)) {
+			parse_str($this->request_data, $this->request_data);
+		}
 	}
 
 	/**

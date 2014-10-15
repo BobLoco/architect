@@ -26,7 +26,7 @@ class Contexts extends ControllerAbstract
 	public function read($id = 0)
 	{
 		if (!empty($id)) {
-			$context = $this->_orm->find('\Architect\ORM\src\Context', $id);
+			$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 			if (empty($context)) {
 				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
@@ -38,7 +38,7 @@ class Contexts extends ControllerAbstract
 				'tasks' => $this->_returnTasks($context->getTasks()),
 			));
 		} else {
-			$repository = $this->_orm->getRepository('\Architect\ORM\src\Context');
+			$repository = $this->orm->getRepository('\Architect\ORM\src\Context');
 			$contexts = $repository->findAll();
 
 			$result = array();
@@ -61,10 +61,10 @@ class Contexts extends ControllerAbstract
 	public function create()
 	{
 		$context = new Context();
-		$context->setContextName($this->_request->get('context_name'));
+		$context->setContextName($this->request->get('context_name'));
 
-		$this->_orm->persist($context);
-		$this->_orm->flush();
+		$this->orm->persist($context);
+		$this->orm->flush();
 
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $context->getId());
 
@@ -84,15 +84,15 @@ class Contexts extends ControllerAbstract
 	 */
 	public function update($id)
 	{
-		$context = $this->_orm->find('\Architect\ORM\src\Context', $id);
+		$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 		if (empty($context)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$context->setContextName($this->_request->get('context_name'));
-		$this->_orm->persist($context);
-		$this->_orm->flush();
+		$context->setContextName($this->request->get('context_name'));
+		$this->orm->persist($context);
+		$this->orm->flush();
 
 		return new Result(
 			ResponseCode::OK,
@@ -110,14 +110,14 @@ class Contexts extends ControllerAbstract
 	 */
 	public function delete($id)
 	{
-		$context = $this->_orm->find('\Architect\ORM\src\Context', $id);
+		$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 		if (empty($context)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$this->_orm->remove($context);
-		$this->_orm->flush();
+		$this->orm->remove($context);
+		$this->orm->flush();
 
 		return new Result(
 			ResponseCode::OK,
