@@ -2,6 +2,7 @@
 namespace Architect;
 
 use \Slim\Slim;
+use \Pimple\Container;
 
 /**
  * Architect\Core
@@ -16,6 +17,8 @@ class Core extends ArchitectAbstract
 {
 	public static $app;
 
+	protected $container;
+
 	/**
 	 * Constructor
 	 */
@@ -23,6 +26,11 @@ class Core extends ArchitectAbstract
 	{
 		self::$app = new Slim();
 		self::$app->add(new \Slim\Middleware\ContentTypes());
+
+		$this->container = new Container();
+		$this->container['request'] = function ($container) {
+			return new Request();
+		};
 	}
 
 	/**
@@ -88,7 +96,7 @@ class Core extends ArchitectAbstract
 			self::$app->halt(404);
 		}
 
-		return new $fullclass();
+		return new $fullclass($this->container);
 	}
 
 	/**

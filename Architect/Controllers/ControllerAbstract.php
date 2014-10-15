@@ -26,16 +26,12 @@ abstract class ControllerAbstract
 	/**
 	 * Constructor
 	 */
-	public function __construct()
+	public function __construct(Container $container)
 	{
 		$entity_manager = new EntityManager();
 		$this->orm = $entity_manager->createManager();
 		$this->request = new Request();
-		$this->container = new Container();
-
-		$this->container['request'] = function ($container) {
-			return new Request();
-		};
+		$this->container = $container;
 	}
 
 	/**
