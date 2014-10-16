@@ -4,7 +4,7 @@ namespace Architect\ORM;
 // use the Doctrine classes
 use \Doctrine\ORM\Tools\Setup;
 
-class EntityManager extends \Architect\ArchitectAbstract
+class EntityManager extends \Architect\ArchitectAbstract implements EntityManagerInterface
 {
 	public function createManager()
 	{

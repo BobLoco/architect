@@ -61,7 +61,7 @@ class Contexts extends ControllerAbstract
 	public function create()
 	{
 		$context = new Context();
-		$context->setContextName($this->request->get('context_name'));
+		$context->setContextName($this->container['request']->get('context_name'));
 
 		$this->orm->persist($context);
 		$this->orm->flush();
@@ -90,7 +90,7 @@ class Contexts extends ControllerAbstract
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$context->setContextName($this->request->get('context_name'));
+		$context->setContextName($this->container['request']->get('context_name'));
 		$this->orm->persist($context);
 		$this->orm->flush();
 

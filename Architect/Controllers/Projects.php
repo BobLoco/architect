@@ -1,33 +1,33 @@
 <?php
 namespace Architect\Controllers;
 
-use \Architect\Core;
-use \Architect\ORM\src\Project;
-use \Architect\ResponseCode;
-use \Architect\Result;
-use \Architect\Request;
+use Architect\Core;
+use Architect\ORM\src\Project;
+use Architect\ResponseCode;
+use Architect\Result;
+use Architect\Request;
 
 /**
  * Architect\Controllers\Project
  *
  * Projects controler
  *
- * @category Controllers
- * @package Architect
- * @subpackage Controllers
+ * @category Architect
+ * @package Controllers
+ * @subpackage Projects
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
 class Projects extends ControllerAbstract
 {
 	/**
 	 * Read a single project or list of projects
-	 * @param  int $id
+	 * @param  int $project_id
 	 * @return array
 	 */
-	public function read($id = 0)
+	public function read($project_id = 0)
 	{
-		if (!empty($id)) {
-			$project = $this->orm->find('\Architect\ORM\src\Project', $id);
+		if (!empty($project_id)) {
+			$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 			if (empty($project)) {
 				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
@@ -104,12 +104,12 @@ class Projects extends ControllerAbstract
 
 	/**
 	 * Update a project
-	 * @param  int $id
+	 * @param  int $project_id
 	 * @return array
 	 */
-	public function update($id)
+	public function update($project_id)
 	{
-		$project = $this->orm->find('\Architect\ORM\src\Project', $id);
+		$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 		if (empty($project)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
@@ -142,12 +142,12 @@ class Projects extends ControllerAbstract
 
 	/**
 	 * Delete a project
-	 * @param  int $id
+	 * @param  int $project_id
 	 * @return array
 	 */
-	public function delete($id)
+	public function delete($project_id)
 	{
-		$project = $this->orm->find('\Architect\ORM\src\Project', $id);
+		$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 		if (empty($project)) {
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);

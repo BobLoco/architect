@@ -1,18 +1,18 @@
 <?php
 namespace Architect\Controllers;
 
-use \Architect\ORM\EntityManager;
-use \Architect\Request;
-use \Pimple\Container;
+use Architect\ORM\EntityManager;
+use Architect\Request;
+use Pimple\Container;
 
 /**
  * Architect\Controllers\ControllerAbstract
  *
  * Abstracted functionality for controllers
  *
- * @category Controllers
- * @package Architect
- * @subpackage Controllers
+ * @category Architec
+ * @package Controllers
+ * @subpackage Abstract
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
 abstract class ControllerAbstract
@@ -25,13 +25,17 @@ abstract class ControllerAbstract
 
 	/**
 	 * Constructor
+	 * @throws \LogicException
 	 */
 	public function __construct(Container $container)
 	{
-		$entity_manager = new EntityManager();
-		$this->orm = $entity_manager->createManager();
-		$this->request = new Request();
 		$this->container = $container;
+
+		if (empty($this->container['entity_manager']) || !($this->container['entity_manager'] instanceof \Architect\ORM\EntityManagerInterface)) {
+			throw new \LogicException('No entity manager set');
+		}
+
+		$this->orm = $this->container['entity_manager']->createManager();
 	}
 
 	/**

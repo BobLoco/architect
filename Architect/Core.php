@@ -22,15 +22,18 @@ class Core extends ArchitectAbstract
 	/**
 	 * Constructor
 	 */
-	public function __construct()
+	public function __construct(Container $container)
 	{
 		self::$app = new Slim();
 		self::$app->add(new \Slim\Middleware\ContentTypes());
 
-		$this->container = new Container();
-		$this->container['request'] = function ($container) {
-			return new Request();
-		};
+		$this->container = $container;
+
+		if (empty($this->container['request'])) {
+			throw new \RuntimeException('No request received');
+		}
+
+		$this->container['request']->validate();
 	}
 
 	/**

@@ -49,7 +49,7 @@ class Request {
 		$params = \Architect\Core::$app->request()->params();
 
 		if (empty($params['secret'])) {
-			throw new \Exception('No application secret set');
+			throw new \RuntimeException('No application secret set');
 		}
 
 		$secret = $params['secret'];
@@ -59,7 +59,7 @@ class Request {
 			return true;
 		} else {
 			if (empty($params['app_id'])) {
-				throw new \Exception('No application ID set');
+				throw new \RuntimeException('No application ID set');
 			}
 
 			$entity_manager = new EntityManager();
@@ -70,7 +70,7 @@ class Request {
 			$app = $orm->find('\Architect\ORM\src\App', $app_id);
 
 			if (empty($app)) {
-				throw new \Exception('Invalid credentials');
+				throw new \RuntimeException('Invalid credentials');
 			}
 
 			$stored_secret = $app->getAppSecret();
@@ -79,7 +79,7 @@ class Request {
 				\Architect\Core::$app->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
 				return true;
 			} else {
-				throw new \Exception('Invalid credentials');
+				throw new \RuntimeException('Invalid credentials');
 			}
 		}
 	}

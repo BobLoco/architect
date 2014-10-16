@@ -78,12 +78,12 @@ class Tasks extends ControllerAbstract
 	public function create()
 	{
 		$task = new Task();
-		$task->setTaskName($this->request->get('task_name'));
-		$task->setDue($this->request->get('due'));
-		$task->setCompleted($this->request->get('completed'));
+		$task->setTaskName($this->container['request']->get('task_name'));
+		$task->setDue($this->container['request']->get('due'));
+		$task->setCompleted($this->container['request']->get('completed'));
 
-		$context_id = $this->request->get('context_id');
-		$project_id = $this->request->get('project_id');
+		$context_id = $this->container['request']->get('context_id');
+		$project_id = $this->container['request']->get('project_id');
 
 		if (!empty($context_id)) {
 			$context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
@@ -128,8 +128,8 @@ class Tasks extends ControllerAbstract
 			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
 		}
 
-		$context_id = $this->request->get('context_id');
-		$project_id = $this->request->get('project_id');
+		$context_id = $this->container['request']->get('context_id');
+		$project_id = $this->container['request']->get('project_id');
 
 		if (!empty($context_id)) {
 			$context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
@@ -145,10 +145,10 @@ class Tasks extends ControllerAbstract
 			$task->setProject(null);
 		}
 
-		$task->setTaskName($this->request->get('task_name'));
+		$task->setTaskName($this->container['request']->get('task_name'));
 
-		$task->setDue($this->request->get('due'));
-		$task->setCompleted($this->request->get('completed'));
+		$task->setDue($this->container['request']->get('due'));
+		$task->setCompleted($this->container['request']->get('completed'));
 		$this->orm->persist($task);
 		$this->orm->flush();
 

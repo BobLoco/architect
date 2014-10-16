@@ -14,7 +14,10 @@ class ResponseCode extends ArchitectAbstract
 {
 	const OK = 0;
 
-	const ERROR_DB = 100;
+	// Errors codes
+	const ERROR_PARAMS = 100;
+	const ERROR_DB = 101;
 
+	// Responses
 	const RESOURCE_NOT_FOUND = 200;
 }
