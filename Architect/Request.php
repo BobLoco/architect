@@ -30,6 +30,7 @@ class Request {
 	 */
 	public function __construct()
 	{
+		\Architect\Core::$app->contentType('application/json');
 		$this->request_data = \Architect\Core::$app->request()->getBody();
 
 		// If the middleware didn't get it, do parse_str on the content
@@ -91,6 +92,8 @@ class Request {
 	 */
 	public function get($param)
 	{
+		var_dump($this->request_data);
+
 		if (in_array($param, array_keys($this->request_data))) {
 			return $this->request_data[$param];
 		} else {
