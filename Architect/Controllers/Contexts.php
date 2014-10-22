@@ -29,7 +29,7 @@ class Contexts extends ControllerAbstract
 			$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 			if (empty($context)) {
-				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+				return new Result(ResponseCode::ERROR_NOTFOUND);
 			}
 
 			return new Result(ResponseCode::OK, array(
@@ -87,7 +87,7 @@ class Contexts extends ControllerAbstract
 		$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 		if (empty($context)) {
-			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+			return new Result(ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$context->setContextName($this->container['request']->get('context_name'));
@@ -113,7 +113,7 @@ class Contexts extends ControllerAbstract
 		$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 		if (empty($context)) {
-			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+			return new Result(ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$this->orm->remove($context);

@@ -109,7 +109,7 @@ class Core extends ArchitectAbstract
 	 */
 	private function _displayOutput(Result $result)
 	{
-		if ($result->getCode() === ResponseCode::RESOURCE_NOT_FOUND) {
+		if ($result->getCode() === ResponseCode::ERROR_NOTFOUND) {
 			self::$app->halt(404);
 		}
 

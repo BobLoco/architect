@@ -2,6 +2,7 @@
 namespace Architect;
 
 use \Architect\ORM\EntityManager;
+use \Architect\ResponseCode;
 
 /**
  * Architect\Request
@@ -30,13 +31,16 @@ class Request {
 	 */
 	public function __construct()
 	{
-		\Architect\Core::$app->contentType('application/json');
 		$this->request_data = \Architect\Core::$app->request()->getBody();
 
-		// If the middleware didn't get it, do parse_str on the content
-		// @TODO - convert this to custom middleware
+		// Total hack to clean-up request data
+		// For some reason Slim's middleware doesn't work :-(
 		if (!is_array($this->request_data)) {
-			parse_str($this->request_data, $this->request_data);
+			$this->request_data = json_decode($this->request_data, true);
+			
+			if (json_last_error() !== JSON_ERROR_NONE) {
+				parse_str($this->request_data, $this->request_data);
+			}
 		}
 	}
 
@@ -50,7 +54,7 @@ class Request {
 		$params = \Architect\Core::$app->request()->params();
 
 		if (empty($params['secret'])) {
-			throw new \RuntimeException('No application secret set');
+			throw new \RuntimeException('No application secret set', ResponseCode::ERROR_BADREQUEST);
 		}
 
 		$secret = $params['secret'];
@@ -60,7 +64,7 @@ class Request {
 			return true;
 		} else {
 			if (empty($params['app_id'])) {
-				throw new \RuntimeException('No application ID set');
+				throw new \RuntimeException('No application ID set', ResponseCode::ERROR_BADREQUEST);
 			}
 
 			$entity_manager = new EntityManager();
@@ -71,7 +75,7 @@ class Request {
 			$app = $orm->find('\Architect\ORM\src\App', $app_id);
 
 			if (empty($app)) {
-				throw new \RuntimeException('Invalid credentials');
+				throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
 			}
 
 			$stored_secret = $app->getAppSecret();
@@ -80,7 +84,7 @@ class Request {
 				\Architect\Core::$app->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
 				return true;
 			} else {
-				throw new \RuntimeException('Invalid credentials');
+				throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
 			}
 		}
 	}
@@ -92,8 +96,6 @@ class Request {
 	 */
 	public function get($param)
 	{
-		var_dump($this->request_data);
-
 		if (in_array($param, array_keys($this->request_data))) {
 			return $this->request_data[$param];
 		} else {

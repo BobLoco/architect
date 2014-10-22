@@ -29,7 +29,7 @@ class Tasks extends ControllerAbstract
 			$task = $this->orm->find('\Architect\ORM\src\Task', $task_id);
 
 			if (empty($task)) {
-				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+				return new Result(ResponseCode::ERROR_NOTFOUND);
 			}
 
 			$completed = $task->getCompleted();
@@ -125,7 +125,7 @@ class Tasks extends ControllerAbstract
 		$task = $this->orm->find('\Architect\ORM\src\Task', $task_id);
 
 		if (empty($task)) {
-			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+			return new Result(ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$context_id = $this->container['request']->get('context_id');
@@ -180,7 +180,7 @@ class Tasks extends ControllerAbstract
 		$task = $this->orm->find('\Architect\ORM\src\Task', $task_id);
 
 		if (empty($task)) {
-			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+			return new Result(ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$this->orm->remove($task);

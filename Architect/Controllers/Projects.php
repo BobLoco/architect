@@ -30,7 +30,7 @@ class Projects extends ControllerAbstract
 			$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 			if (empty($project)) {
-				return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+				return new Result(ResponseCode::ERROR_NOTFOUND);
 			}
 
 			$context = $project->getContext();
@@ -112,7 +112,7 @@ class Projects extends ControllerAbstract
 		$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 		if (empty($project)) {
-			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+			return new Result(ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$context_id = $this->container['request']->get('context_id');
@@ -150,7 +150,7 @@ class Projects extends ControllerAbstract
 		$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 		if (empty($project)) {
-			return new Result(ResponseCode::RESOURCE_NOT_FOUND);
+			return new Result(ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$this->orm->remove($project);
