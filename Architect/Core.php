@@ -122,6 +122,7 @@ class Core extends ArchitectAbstract
 			$response->status($status);
 		}
 
+		// @TODO : SET RESPONSE CONTENT TYPE
 		$response->write(json_encode($data));
 	}
 }
