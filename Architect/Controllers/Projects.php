@@ -24,7 +24,7 @@ class Projects extends ControllerAbstract
 	 * @param  int $project_id
 	 * @return array
 	 */
-	public function read($project_id = 0)
+	public function read($project_id = null)
 	{
 		if (!empty($project_id)) {
 			$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
@@ -94,7 +94,7 @@ class Projects extends ControllerAbstract
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $project->getId());
 
 		return new Result(
-			ResponseCode::OK,
+			ResponseCode::OK_CREATED,
 			array(
 				'project_id' => $project->getId(),
 				'project_name' => $project->getProjectName(),

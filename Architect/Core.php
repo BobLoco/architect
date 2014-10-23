@@ -24,16 +24,10 @@ class Core extends ArchitectAbstract
 	 */
 	public function __construct(Container $container)
 	{
-		self::$app = new Slim();
+		self::$app = new Slim(array('debug' => false));
 		self::$app->add(new \Slim\Middleware\ContentTypes());
 
 		$this->container = $container;
-
-		if (empty($this->container['request'])) {
-			throw new \RuntimeException('No request received');
-		}
-
-		$this->container['request']->validate();
 	}
 
 	/**
@@ -43,82 +37,91 @@ class Core extends ArchitectAbstract
 	 */
 	public function routes()
 	{
-		self::$app->get('/:class/:identifier', function($class, $identifier) {
-			$loaded = $this->_loadClass($class);
+		self::$app->error(function (\Exception $exception) {
+			$data = array(
+				'Message' => $exception->getMessage(),
+				'Code' => $exception->getCode(),
+			);
+			$status = $exception->getCode();
 
-			$this->_displayOutput($loaded->read($identifier));
+			$this->_displayResponse($data, $status);
+		});
+
+		self::$app->get('/:class/:identifier', function($class, $identifier) {
+			$this->_respond($class, 'read', $identifier);
 		});
 
 		self::$app->get('/:class', function ($class) {
-			$loaded = $this->_loadClass($class);
-
-			$this->_displayOutput($loaded->read());
+			$this->_respond($class, 'read');
 		});
 
 		self::$app->put('/:class/:identifier', function($class, $identifier) {
-			$loaded = $this->_loadClass($class);
-
-			$this->_displayOutput($loaded->update($identifier));
+			$this->_respond($class, 'update', $identifier);
 		});
 
 		self::$app->post('/:class', function($class) {
-			$loaded = $this->_loadClass($class);
-
-			$result = $loaded->create();
-
-			if ($result->getCode() === ResponseCode::OK) {
-				Core::$app->response->setStatus(201);
-			}
-
-			$this->_displayOutput($result);
+			$this->_respond($class, 'create');
 		});
 
 		self::$app->delete('/:class/:identifier', function($class, $identifier) {
-			$loaded = $this->_loadClass($class);
-
-			$this->_displayOutput($loaded->delete($identifier));
+			$this->_respond($class, 'delete', $identifier);
 		});
 
 		self::$app->options('/(:name+)', function(){
 			self::$app->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
 			self::$app->response()->header('Access-Control-Allow-Headers', 'Content-Type');
 		});
+
+		
 	}
 
-	/**
-	 * Load a class based on the route recieved
-	 * @param  string $class
-	 * @param  object $app
-	 * @return object
-	 */
-	private function _loadClass($class)
+	private function _respond($class, $method, $identifier = null)
 	{
+		// Validate the request
+		$this->container['request']->validate();
+
 		$fullclass = '\\Architect\\Controllers\\' . ucfirst($class);
 
+		// 404 if the class doesn't exist
 		if (!class_exists($fullclass)) {
 			self::$app->halt(404);
 		}
 
-		return new $fullclass($this->container);
-	}
+		// Otherwise, instantiate it and pass it the container
+		$loaded_class = new $fullclass($this->container);
 
-	/**
-	 * Display the result output
-	 * @param  Result $result
-	 * @return void
-	 */
-	private function _displayOutput(Result $result)
-	{
-		if ($result->getCode() === ResponseCode::ERROR_NOTFOUND) {
-			self::$app->halt(404);
+		if (!is_null($identifier)) {
+			$result = $loaded_class->$method($identifier);
+		} else {
+			$result = $loaded_class->$method();
+		}
+
+		if (!($result instanceof Result)) {
+			throw new \LogicException('No result sent from API', ResponseCode::ERROR_INTERNAL);
 		}
 
 		$data = $result->getData();
+		$status = $result->getCode();
 
-		if (isset($data)) {
-			$response = self::$app->response();
-			$response->header('Access-Control-Allow-Origin', '*');
-			$response->write(json_encode($data));
+		$this->_displayResponse($data, $code);
+	}
+
+	private function _displayResponse($data, $code) {
+
+		// Default to 200 if all else fails
+		if (empty($status)) {
+			$status = ResponseCode::OK;
 		}
+
+		$response = self::$app->response();
+		$response->header('Access-Control-Allow-Origin', '*');
+
+		if ($status > 599) {
+			$response->status(ResponseCode::ERROR_INTERNAL);
+		} else {
+			$response->status($status);
+		}
+
+		$response->write(json_encode($data));
 	}
 }

@@ -23,7 +23,7 @@ class Tasks extends ControllerAbstract
 	 * @param  int $task_id
 	 * @return array
 	 */
-	public function read($task_id = 0)
+	public function read($task_id = null)
 	{
 		if (!empty($task_id)) {
 			$task = $this->orm->find('\Architect\ORM\src\Task', $task_id);
@@ -104,7 +104,7 @@ class Tasks extends ControllerAbstract
 		$completed = $task->getCompleted();
 
 		return new Result(
-			ResponseCode::OK,
+			ResponseCode::OK_CREATED,
 			array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),

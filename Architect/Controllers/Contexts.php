@@ -23,7 +23,7 @@ class Contexts extends ControllerAbstract
 	 * @param  int $id
 	 * @return array
 	 */
-	public function read($id = 0)
+	public function read($id = null)
 	{
 		if (!empty($id)) {
 			$context = $this->orm->find('\Architect\ORM\src\Context', $id);
@@ -69,7 +69,7 @@ class Contexts extends ControllerAbstract
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $context->getId());
 
 		return new Result(
-			ResponseCode::OK,
+			ResponseCode::OK_CREATED,
 			array(
 				'context_id' => $context->getId(),
 				'context_name' => $context->getContextName(),
