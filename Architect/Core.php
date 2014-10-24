@@ -24,50 +24,67 @@ class Core extends ArchitectAbstract
 	 */
 	public function __construct(Container $container)
 	{
+		// Create the Slim object
 		self::$app = new Slim(array('debug' => false));
+
+		// Optimistically add the ContentTypes middleware
+		// This doesn't seem to work yet
 		self::$app->add(new \Slim\Middleware\ContentTypes());
 
+		// Set the container to be available to the core
 		$this->container = $container;
 	}
 
 	/**
 	 * Define the routes and return output for each REST method
-	 * @param  object $app
-	 * @return void
+	 * @throws \RuntimeException
 	 */
 	public function routes()
 	{
+		// Handle any exceptions
 		self::$app->error(function (\Exception $exception) {
 			$data = array(
 				'Message' => $exception->getMessage(),
 				'Code' => $exception->getCode(),
 			);
-			$status = $exception->getCode();
+			$code = $exception->getCode();
 
-			$this->_displayResponse($data, $status);
+			$this->displayResponse($data, $code);
 		});
 
-		self::$app->get('/:class/:identifier', function($class, $identifier) {
-			$this->_respond($class, 'read', $identifier);
+		self::$app->get('/:class/:identifier', function ($class, $identifier) {
+			$this->respond($class, 'read', $identifier);
 		});
 
 		self::$app->get('/:class', function ($class) {
-			$this->_respond($class, 'read');
+			$this->respond($class, 'read');
 		});
 
-		self::$app->put('/:class/:identifier', function($class, $identifier) {
-			$this->_respond($class, 'update', $identifier);
+		self::$app->put('/:class/:identifier', function ($class, $identifier) {
+			$this->respond($class, 'update', $identifier);
 		});
 
-		self::$app->post('/:class', function($class) {
-			$this->_respond($class, 'create');
+		self::$app->put('/:class', function ($class) {
+			throw new \RuntimeException('A resource identifier must be specified when using PUT', ResponseCode::ERROR_NOMETHOD);
 		});
 
-		self::$app->delete('/:class/:identifier', function($class, $identifier) {
-			$this->_respond($class, 'delete', $identifier);
+		self::$app->post('/:class/:identifier', function ($class, $identifier) {
+			throw new \RuntimeException('A resource identifier cannot be specified when using POST', ResponseCode::ERROR_NOMETHOD);
 		});
 
-		self::$app->options('/(:name+)', function(){
+		self::$app->post('/:class', function ($class) {
+			$this->respond($class, 'create');
+		});
+
+		self::$app->delete('/:class/:identifier', function ($class, $identifier) {
+			$this->respond($class, 'delete', $identifier);
+		});
+
+		self::$app->delete('/:class', function ($class) {
+			throw new \RuntimeException('A resource identifier must be specified when using DELETE', ResponseCode::ERROR_NOMETHOD);
+		});
+
+		self::$app->options('/(:name+)', function () {
 			self::$app->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
 			self::$app->response()->header('Access-Control-Allow-Headers', 'Content-Type');
 		});
@@ -75,11 +92,19 @@ class Core extends ArchitectAbstract
 		
 	}
 
-	private function _respond($class, $method, $identifier = null)
+	/**
+	 * Respond to a successful route
+	 * @param string $class The class name
+	 * @param string $method The method to be called
+	 * @param int $identifier The identifier of the resource
+	 * @throws \LogicException
+	 */
+	private function respond($class, $method, $identifier = null)
 	{
 		// Validate the request
 		$this->container['request']->validate();
 
+		// Make it a controller namespace
 		$fullclass = '\\Architect\\Controllers\\' . ucfirst($class);
 
 		// 404 if the class doesn't exist
@@ -90,39 +115,57 @@ class Core extends ArchitectAbstract
 		// Otherwise, instantiate it and pass it the container
 		$loaded_class = new $fullclass($this->container);
 
+		// Throw an exception when the method hasn't been created yet
+		if (!method_exists($loaded_class, $method)) {
+			throw new \LogicException('Method does not exist in resource', ResponseCode::ERROR_NOTIMPLEMENTED);
+		}
+
+		// Call the method with or without the identifier accordingly
 		if (!is_null($identifier)) {
 			$result = $loaded_class->$method($identifier);
 		} else {
 			$result = $loaded_class->$method();
 		}
 
+		// Check the result is an actual result
 		if (!($result instanceof Result)) {
 			throw new \LogicException('No result sent from API', ResponseCode::ERROR_INTERNAL);
 		}
 
+		// Get the data and code
 		$data = $result->getData();
-		$status = $result->getCode();
+		$code = $result->getCode();
 
-		$this->_displayResponse($data, $code);
+		// Display it!
+		$this->displayResponse($data, $code);
 	}
 
-	private function _displayResponse($data, $code) {
-
+	/**
+	 * Output a response
+	 * @param array $data The data
+	 * @param int $code The response code
+	 */
+	private function displayResponse($data, $code) {
 		// Default to 200 if all else fails
-		if (empty($status)) {
-			$status = ResponseCode::OK;
+		if (empty($code)) {
+			$code = ResponseCode::OK;
 		}
 
+		// Get the response from Slim
 		$response = self::$app->response();
-		$response->header('Access-Control-Allow-Origin', '*');
 
-		if ($status > 599) {
-			$response->status(ResponseCode::ERROR_INTERNAL);
+		// Set the headers
+		$response->header('Access-Control-Allow-Origin', '*');
+		$response->header("Content-Type", "application/json");
+
+		// If our status code is an internal one, just give a generic 503
+		if ($code > 599) {
+			$response->setStatus(ResponseCode::ERROR_INTERNAL);
 		} else {
-			$response->status($status);
+			$response->setStatus($code);
 		}
 
-		// @TODO : SET RESPONSE CONTENT TYPE
+		// Output it!
 		$response->write(json_encode($data));
 	}
 }
