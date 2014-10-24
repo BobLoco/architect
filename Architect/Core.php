@@ -9,8 +9,8 @@ use \Pimple\Container;
  *
  * Defines and runs the core rendering Architect
  *
- * @category Core
- * @package Architect
+ * @category Architect
+ * @package Core
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
 class Core extends ArchitectAbstract
@@ -52,6 +52,7 @@ class Core extends ArchitectAbstract
 			$this->displayResponse($data, $code);
 		});
 
+		// GET requests
 		self::$app->get('/:class/:identifier', function ($class, $identifier) {
 			$this->respond($class, 'read', $identifier);
 		});
@@ -60,6 +61,7 @@ class Core extends ArchitectAbstract
 			$this->respond($class, 'read');
 		});
 
+		// PUT requests
 		self::$app->put('/:class/:identifier', function ($class, $identifier) {
 			$this->respond($class, 'update', $identifier);
 		});
@@ -68,6 +70,7 @@ class Core extends ArchitectAbstract
 			throw new \RuntimeException('A resource identifier must be specified when using PUT', ResponseCode::ERROR_NOMETHOD);
 		});
 
+		// POST requests
 		self::$app->post('/:class/:identifier', function ($class, $identifier) {
 			throw new \RuntimeException('A resource identifier cannot be specified when using POST', ResponseCode::ERROR_NOMETHOD);
 		});
@@ -76,6 +79,7 @@ class Core extends ArchitectAbstract
 			$this->respond($class, 'create');
 		});
 
+		// DELETE requests
 		self::$app->delete('/:class/:identifier', function ($class, $identifier) {
 			$this->respond($class, 'delete', $identifier);
 		});
@@ -84,12 +88,11 @@ class Core extends ArchitectAbstract
 			throw new \RuntimeException('A resource identifier must be specified when using DELETE', ResponseCode::ERROR_NOMETHOD);
 		});
 
+		// OPTIONS requests
 		self::$app->options('/(:name+)', function () {
 			self::$app->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
 			self::$app->response()->header('Access-Control-Allow-Headers', 'Content-Type');
 		});
-
-		
 	}
 
 	/**
@@ -158,14 +161,14 @@ class Core extends ArchitectAbstract
 		$response->header('Access-Control-Allow-Origin', '*');
 		$response->header("Content-Type", "application/json");
 
-		// If our status code is an internal one, just give a generic 503
+		// If our status code is an internal one, just give a generic 500
 		if ($code > 599) {
 			$response->setStatus(ResponseCode::ERROR_INTERNAL);
 		} else {
 			$response->setStatus($code);
 		}
 
-		// Output it!
+		// Output the response!
 		$response->write(json_encode($data));
 	}
 }
