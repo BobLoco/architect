@@ -56,14 +56,14 @@ abstract class ControllerAbstract
 					'task_id' => $task->getId(),
 					'task_name' => $task->getTaskName(),
 					'completed' => $task->getCompleted(),
-					'context' => array(
+					'context' => !empty($context) ? array(
 						'context_id' => $context->getId(),
 						'context_name' => $context->getContextName(),
-					),
-					'project' => array(
+					) : null,
+					'project' => !empty($project) ? array(
 						'project_id' => $project->getId(),
 						'project_name' => $project->getProjectName(),
-					),
+					) : null,
 				);
 			}
 		}

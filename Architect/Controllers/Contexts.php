@@ -29,10 +29,10 @@ class Contexts extends ControllerAbstract
 			$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 			if (empty($context)) {
-				return new Result(ResponseCode::ERROR_NOTFOUND);
+				return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
 			}
 
-			return new Result(ResponseCode::OK, array(
+			return new Result(array(
 				'context_id' => $context->getId(),
 				'context_name' => $context->getContextName(),
 				'tasks' => $this->_returnTasks($context->getTasks()),
@@ -50,7 +50,7 @@ class Contexts extends ControllerAbstract
 				);
 			}
 
-			return new Result(ResponseCode::OK, $result);
+			return new Result($result);
 		}
 	}
 
@@ -69,11 +69,11 @@ class Contexts extends ControllerAbstract
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $context->getId());
 
 		return new Result(
-			ResponseCode::OK_CREATED,
 			array(
 				'context_id' => $context->getId(),
 				'context_name' => $context->getContextName(),
-			)
+			),
+			ResponseCode::OK_CREATED
 		);
 	}
 
@@ -87,7 +87,7 @@ class Contexts extends ControllerAbstract
 		$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 		if (empty($context)) {
-			return new Result(ResponseCode::ERROR_NOTFOUND);
+			return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$context->setContextName($this->container['request']->get('context_name'));
@@ -95,7 +95,6 @@ class Contexts extends ControllerAbstract
 		$this->orm->flush();
 
 		return new Result(
-			ResponseCode::OK,
 			array(
 				'context_id' => $context->getId(),
 				'context_name' => $context->getContextName(),
@@ -113,14 +112,13 @@ class Contexts extends ControllerAbstract
 		$context = $this->orm->find('\Architect\ORM\src\Context', $id);
 
 		if (empty($context)) {
-			return new Result(ResponseCode::ERROR_NOTFOUND);
+			return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$this->orm->remove($context);
 		$this->orm->flush();
 
 		return new Result(
-			ResponseCode::OK,
 			array(
 				'success' => true,
 			)

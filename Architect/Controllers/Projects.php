@@ -30,12 +30,12 @@ class Projects extends ControllerAbstract
 			$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 			if (empty($project)) {
-				return new Result(ResponseCode::ERROR_NOTFOUND);
+				return new Result(array('message' => 'Project not found'), ResponseCode::ERROR_NOTFOUND);
 			}
 
 			$context = $project->getContext();
 
-			return new Result(ResponseCode::OK, array(
+			return new Result(array(
 				'project_id' => $project->getId(),
 				'project_name' => $project->getProjectName(),
 				'project_description' => $project->getProjectDescription(),
@@ -63,7 +63,7 @@ class Projects extends ControllerAbstract
 				);
 			}
 
-			return new Result(ResponseCode::OK, $result);
+			return new Result($result);
 		}
 	}
 
@@ -94,11 +94,11 @@ class Projects extends ControllerAbstract
 		Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $project->getId());
 
 		return new Result(
-			ResponseCode::OK_CREATED,
 			array(
 				'project_id' => $project->getId(),
 				'project_name' => $project->getProjectName(),
-			)
+			),
+			ResponseCode::OK_CREATED
 		);
 	}
 
@@ -112,7 +112,7 @@ class Projects extends ControllerAbstract
 		$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 		if (empty($project)) {
-			return new Result(ResponseCode::ERROR_NOTFOUND);
+			return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$context_id = $this->container['request']->get('context_id');
@@ -132,7 +132,6 @@ class Projects extends ControllerAbstract
 		$this->orm->flush();
 
 		return new Result(
-			ResponseCode::OK,
 			array(
 				'project_id' => $project->getId(),
 				'project_name' => $project->getProjectName(),
@@ -150,14 +149,13 @@ class Projects extends ControllerAbstract
 		$project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
 
 		if (empty($project)) {
-			return new Result(ResponseCode::ERROR_NOTFOUND);
+			return new Result(array('message' => 'Project not found'), ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$this->orm->remove($project);
 		$this->orm->flush();
 
 		return new Result(
-			ResponseCode::OK,
 			array(
 				'success' => true,
 			)

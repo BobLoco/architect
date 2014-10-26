@@ -22,7 +22,7 @@ class Result extends ArchitectAbstract
 	 * @param array $data The data to be output
 	 * @param string $message An optional debug message to be passed
 	 */
-	public function __construct($code, $data = null, $message = null)
+	public function __construct($data = null, $code = ResponseCode::OK, $message = null)
 	{
 		$this->_code = $code;
 		$this->_data = $data;

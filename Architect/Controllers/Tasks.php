@@ -29,7 +29,7 @@ class Tasks extends ControllerAbstract
 			$task = $this->orm->find('\Architect\ORM\src\Task', $task_id);
 
 			if (empty($task)) {
-				return new Result(ResponseCode::ERROR_NOTFOUND);
+				return new Result(array('message' => 'Task not found'), ResponseCode::ERROR_NOTFOUND);
 			}
 
 			$completed = $task->getCompleted();
@@ -37,7 +37,7 @@ class Tasks extends ControllerAbstract
 			$context = $task->getContext();
 			$project = $task->getProject();
 
-			return new Result(ResponseCode::OK, array(
+			return new Result(array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
 				'context' => !empty($context) ? $this->_returnContext($context) : false,
@@ -67,7 +67,7 @@ class Tasks extends ControllerAbstract
 				);
 			}
 
-			return new Result(ResponseCode::OK, $result);
+			return new Result($result);
 		}
 	}
 
@@ -104,14 +104,14 @@ class Tasks extends ControllerAbstract
 		$completed = $task->getCompleted();
 
 		return new Result(
-			ResponseCode::OK_CREATED,
 			array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
 				'context' => !empty($context) ? $this->_returnContext($context) : false,
 				'due' => !empty($due) ? $due : false,
 				'completed' => !empty($completed) ? $completed : false,
-			)
+			),
+			ResponseCode::OK_CREATED
 		);
 	}
 
@@ -125,7 +125,7 @@ class Tasks extends ControllerAbstract
 		$task = $this->orm->find('\Architect\ORM\src\Task', $task_id);
 
 		if (empty($task)) {
-			return new Result(ResponseCode::ERROR_NOTFOUND);
+			return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$context_id = $this->container['request']->get('context_id');
@@ -158,8 +158,7 @@ class Tasks extends ControllerAbstract
 		$project = $task->getProject();
 
 		return new Result(
-			ResponseCode::OK,
-			array(
+						array(
 				'task_id' => $task->getId(),
 				'task_name' => $task->getTaskName(),
 				'context' => !empty($context) ? $this->_returnContext($context) : false,
@@ -180,14 +179,13 @@ class Tasks extends ControllerAbstract
 		$task = $this->orm->find('\Architect\ORM\src\Task', $task_id);
 
 		if (empty($task)) {
-			return new Result(ResponseCode::ERROR_NOTFOUND);
+			return new Result(array('message' => 'Task not found'), ResponseCode::ERROR_NOTFOUND);
 		}
 
 		$this->orm->remove($task);
 		$this->orm->flush();
 
 		return new Result(
-			ResponseCode::OK,
 			array(
 				'success' => true,
 			)
