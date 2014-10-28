@@ -90,6 +90,7 @@ class Core extends ArchitectAbstract
 
 		// OPTIONS requests
 		self::$app->options('/(:name+)', function () {
+			$this->container['request']->validate();
 			self::$app->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
 			self::$app->response()->header('Access-Control-Allow-Headers', 'Content-Type');
 		});
