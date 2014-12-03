@@ -14,5 +14,5 @@
         "doctrine/orm": "2.4.*",
         "monolog/monolog": "1.*",
         "pimple/pimple": "3.0.*"
-    },
+    }
 }
