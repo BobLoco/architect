@@ -12,47 +12,47 @@ namespace Architect;
  */
 class Result extends ArchitectAbstract
 {
-	private $_code;
-	private $_data;
-	private $_message;
+    private $code;
+    private $data;
+    private $message;
 
-	/**
-	 * Constructor
-	 * @param int $code The response code
-	 * @param array $data The data to be output
-	 * @param string $message An optional debug message to be passed
-	 */
-	public function __construct($data = null, $code = ResponseCode::OK, $message = null)
-	{
-		$this->_code = $code;
-		$this->_data = $data;
-		$this->_message = $message;
-	}
+    /**
+     * Constructor
+     * @param int $code The response code
+     * @param array $data The data to be output
+     * @param string $message An optional debug message to be passed
+     */
+    public function __construct($data = null, $code = ResponseCode::OK, $message = null)
+    {
+        $this->code = $code;
+        $this->data = $data;
+        $this->message = $message;
+    }
 
-	/**
-	 * Get the response code
-	 * @return int
-	 */
-	public function getCode()
-	{
-		return $this->_code;
-	}
+    /**
+     * Get the response code
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 
-	/**
-	 * Get the data of the response
-	 * @return array
-	 */
-	public function getData()
-	{
-		return $this->_data;
-	}
+    /**
+     * Get the data of the response
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 
-	/**
-	 * Get any debug message
-	 * @return string
-	 */
-	public function getMessage()
-	{
-		return $this->_message;
-	}
+    /**
+     * Get any debug message
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 }

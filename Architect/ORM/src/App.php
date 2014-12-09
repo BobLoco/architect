@@ -17,104 +17,104 @@ use \Doctrine\Common\Collections\ArrayCollection;
  */
 class App
 {
-	/** 
-	 * The ID of the app
-	 * @var int
-	 * @Id
-	 * @Column(type="integer")
-	 * @GeneratedValue
-	 */
-	protected $app_id;
+    /** 
+     * The ID of the app
+     * @var int
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue
+     */
+    protected $appId;
 
-	/**
-	 * The name of the app
-	 * @var string
-	 * @Column(type="string")
-	 */
-	protected $app_name;
+    /**
+     * The name of the app
+     * @var string
+     * @Column(type="string")
+     */
+    protected $appName;
 
-	/**
-	 * The URL of the app
-	 * @var string
-	 * @Column(type="string", nullable=true)
-	 */
-	protected $app_url;
+    /**
+     * The URL of the app
+     * @var string
+     * @Column(type="string", nullable=true)
+     */
+    protected $appUrl;
 
-	/**
-	 * The app secret
-	 * @var string
-	 * @Column(type="string")
-	 */
-	protected $app_secret;
+    /**
+     * The app secret
+     * @var string
+     * @Column(type="string")
+     */
+    protected $appSecret;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		$this->tasks = new ArrayCollection;
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection;
+    }
 
-	/**
-	 * Get the ID of the app
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->app_id;
-	}
+    /**
+     * Get the ID of the app
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->appId;
+    }
 
-	/**
-	 * Get the name of the app
-	 * @return string
-	 */
-	public function getAppName()
-	{
-		return $this->app_name;
-	}
+    /**
+     * Get the name of the app
+     * @return string
+     */
+    public function getAppName()
+    {
+        return $this->appName;
+    }
 
-	/**
-	 * Set the name of the app
-	 * @param string $app_name
-	 */
-	public function setAppName($app_name)
-	{
-		$this->app_name = $app_name;
-	}
+    /**
+     * Set the name of the app
+     * @param string $appName
+     */
+    public function setAppName($appName)
+    {
+        $this->appName = $appName;
+    }
 
-	/**
-	 * Get the url of the app
-	 * @return string
-	 */
-	public function getAppUrl()
-	{
-		return $this->app_url;
-	}
+    /**
+     * Get the url of the app
+     * @return string
+     */
+    public function getAppUrl()
+    {
+        return $this->appUrl;
+    }
 
-	/**
-	 * Set the url of the app
-	 * @param string $app_url
-	 */
-	public function setAppUrl($app_url)
-	{
-		$this->app_url = $app_url;
-	}
+    /**
+     * Set the url of the app
+     * @param string $appUrl
+     */
+    public function setAppUrl($appUrl)
+    {
+        $this->appUrl = $appUrl;
+    }
 
-	/**
-	 * Get the secret of the app
-	 * @return string
-	 */
-	public function getAppSecret()
-	{
-		return $this->app_secret;
-	}
+    /**
+     * Get the secret of the app
+     * @return string
+     */
+    public function getAppSecret()
+    {
+        return $this->appSecret;
+    }
 
-	/**
-	 * Set the secret of the app
-	 * @param string $app_secret
-	 */
-	public function setAppSecret($app_secret)
-	{
-		$this->app_secret = $app_secret;
-	}
+    /**
+     * Set the secret of the app
+     * @param string $appSecret
+     */
+    public function setAppSecret($appSecret)
+    {
+        $this->appSecret = $appSecret;
+    }
 }

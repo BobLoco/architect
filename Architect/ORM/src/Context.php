@@ -17,85 +17,85 @@ use \Doctrine\Common\Collections\ArrayCollection;
  */
 class Context
 {
-	/** 
-	 * The ID of the context
-	 * @var int
-	 * @Id
-	 * @Column(type="integer")
-	 * @GeneratedValue
-	 */
-	protected $context_id;
+    /** 
+     * The ID of the context
+     * @var int
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue
+     */
+    protected $contextId;
 
-	/**
-	 * The name of the context
-	 * @var string
-	 * @Column(type="string")
-	 */
-	protected $context_name;
+    /**
+     * The name of the context
+     * @var string
+     * @Column(type="string")
+     */
+    protected $contextName;
 
-	/**
-	 * Tasks attached to the context
-	 * @OneToMany(targetEntity="Task", mappedBy="context")
-	 */
-	private $tasks;
+    /**
+     * Tasks attached to the context
+     * @OneToMany(targetEntity="Task", mappedBy="context")
+     */
+    private $tasks;
 
-	/**
-	 * Projects attached to the context
-	 * @var ArrayCollection
-	 * @OneToMany(targetEntity="Project", mappedBy="context")
-	 */
-	private $projects;
+    /**
+     * Projects attached to the context
+     * @var ArrayCollection
+     * @OneToMany(targetEntity="Project", mappedBy="context")
+     */
+    private $projects;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		$this->tasks = new ArrayCollection;
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection;
+    }
 
-	/**
-	 * Get the ID of the context
-	 * @return int
-	 */
-	public function getId()
-	{
-		return $this->context_id;
-	}
+    /**
+     * Get the ID of the context
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->contextId;
+    }
 
-	/**
-	 * Get the name of the context
-	 * @return string
-	 */
-	public function getContextName()
-	{
-		return $this->context_name;
-	}
+    /**
+     * Get the name of the context
+     * @return string
+     */
+    public function getContextName()
+    {
+        return $this->contextName;
+    }
 
-	/**
-	 * Set the name of the context
-	 * @param string $context_name
-	 */
-	public function setContextName($context_name)
-	{
-		$this->context_name = $context_name;
-	}
+    /**
+     * Set the name of the context
+     * @param string $contextName
+     */
+    public function setContextName($contextName)
+    {
+        $this->contextName = $contextName;
+    }
 
-	/**
-	 * Get the tasks associated with the context
-	 * @return ArrayCollection
-	 */
-	public function getTasks()
-	{
-		return $this->tasks;
-	}
+    /**
+     * Get the tasks associated with the context
+     * @return ArrayCollection
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
 
-	/**
-	 * Get the projects associated with the context
-	 * @return ArrayCollection
-	 */
-	public function getProjects()
-	{
-		return $this->projects;
-	}
+    /**
+     * Get the projects associated with the context
+     * @return ArrayCollection
+     */
+    public function getProjects()
+    {
+        return $this->projects;
+    }
 }

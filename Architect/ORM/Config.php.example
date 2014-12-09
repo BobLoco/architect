@@ -4,10 +4,10 @@ namespace Architect\ORM;
 
 class Config
 {
-	const DB_HOST = 'localhost';
-	const DB_USER = 'root';
-	const DB_PASS = 'yourpassword';
-	const DB_DATABASE = 'architect';
+    const DB_HOST = 'localhost';
+    const DB_USER = 'root';
+    const DB_PASS = 'yourpassword';
+    const DB_DATABASE = 'architect';
 
-	const DB_DRIVER = 'pdo_mysql';
+    const DB_DRIVER = 'pdo_mysql';
 }

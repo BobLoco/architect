@@ -15,91 +15,91 @@ use \Architect\ResponseCode;
  */
 class Request {
 
-	/**
-	 * Master key
-	 */
-	const MASTER = '1392efdc4a7dd3808f33940250f624fd';
+    /**
+     * Master key
+     */
+    const MASTER = '1392efdc4a7dd3808f33940250f624fd';
 
-	/**
-	 * The request data
-	 * @var array
-	 */
-	private $request_data = array();
+    /**
+     * The request data
+     * @var array
+     */
+    private $requestData = array();
 
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		$this->request_data = \Architect\Core::$app->request()->getBody();
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->requestData = \Architect\Core::$app->request()->getBody();
 
-		// Total hack to clean-up request data
-		// For some reason Slim's middleware doesn't work :-(
-		if (!is_array($this->request_data)) {
-			$this->request_data = json_decode($this->request_data, true);
-			
-			if (json_last_error() !== JSON_ERROR_NONE) {
-				parse_str($this->request_data, $this->request_data);
-			}
-		}
-	}
+        // Total hack to clean-up request data
+        // For some reason Slim's middleware doesn't work :-(
+        if (!is_array($this->requestData)) {
+            $this->requestData = json_decode($this->requestData, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                parse_str($this->requestData, $this->requestData);
+            }
+        }
+    }
 
-	/**
-	 * Validate the request
-	 * @return boolean Whether the request is valid
-	 */
-	public function validate()
-	{
-		// Grab the parameters from the request
-		$params = \Architect\Core::$app->request()->params();
+    /**
+     * Validate the request
+     * @return boolean Whether the request is valid
+     */
+    public function validate()
+    {
+        // Grab the parameters from the request
+        $params = \Architect\Core::$app->request()->params();
 
-		if (empty($params['secret'])) {
-			throw new \RuntimeException('No application secret set', ResponseCode::ERROR_BADREQUEST);
-		}
+        if (empty($params['secret'])) {
+            throw new \RuntimeException('No application secret set', ResponseCode::ERROR_BADREQUEST);
+        }
 
-		$secret = $params['secret'];
+        $secret = $params['secret'];
 
-		if ($secret == self::MASTER) {
-			\Architect\Core::$app->response()->header('Access-Control-Allow-Origin', '*');
-			return true;
-		} else {
-			if (empty($params['app_id'])) {
-				throw new \RuntimeException('No application ID set', ResponseCode::ERROR_BADREQUEST);
-			}
+        if ($secret == self::MASTER) {
+            \Architect\Core::$app->response()->header('Access-Control-Allow-Origin', '*');
+            return true;
+        } else {
+            if (empty($params['app_id'])) {
+                throw new \RuntimeException('No application ID set', ResponseCode::ERROR_BADREQUEST);
+            }
 
-			$entity_manager = new EntityManager();
-			$orm = $entity_manager->createManager();
+            $entityManager = new EntityManager();
+            $orm = $entityManager->createManager();
 
-			$app_id = (int) $params['app_id'];
+            $appId = (int) $params['app_id'];
 
-			$app = $orm->find('\Architect\ORM\src\App', $app_id);
+            $app = $orm->find('\Architect\ORM\src\App', $appId);
 
-			if (empty($app)) {
-				throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
-			}
+            if (empty($app)) {
+                throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
+            }
 
-			$stored_secret = $app->getAppSecret();
+            $storedSecret = $app->getAppSecret();
 
-			if ($params['secret'] === $stored_secret) {
-				\Architect\Core::$app->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
-				return true;
-			} else {
-				throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
-			}
-		}
-	}
+            if ($params['secret'] === $storedSecret) {
+                \Architect\Core::$app->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
+                return true;
+            } else {
+                throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
+            }
+        }
+    }
 
-	/**
-	 * Retrieve an individual parameter
-	 * @param  string $param The parameter to retrieve
-	 * @return mixed The parameter value
-	 */
-	public function get($param)
-	{
-		if (in_array($param, array_keys($this->request_data))) {
-			return $this->request_data[$param];
-		} else {
-			return false;
-		}
-	}
+    /**
+     * Retrieve an individual parameter
+     * @param  string $param The parameter to retrieve
+     * @return mixed The parameter value
+     */
+    public function get($param)
+    {
+        if (in_array($param, array_keys($this->requestData))) {
+            return $this->requestData[$param];
+        } else {
+            return false;
+        }
+    }
 }
