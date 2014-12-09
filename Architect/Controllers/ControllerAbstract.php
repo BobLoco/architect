@@ -43,16 +43,16 @@ abstract class ControllerAbstract
 	 * @param  ArrayCollection $tasks
 	 * @return array
 	 */
-	protected function _returnTasks($tasks)
+	protected function returnTasks($tasks)
 	{
-		$sorted_tasks = array();
+		$sortedTasks = array();
 
 		if (!empty($tasks)) {
 			foreach ($tasks as $task) {
 				$context = $task->getContext();
 				$project = $task->getProject();
 
-				$sorted_tasks[] = array(
+				$sortedTasks[] = array(
 					'task_id' => $task->getId(),
 					'task_name' => $task->getTaskName(),
 					'completed' => $task->getCompleted(),
@@ -68,6 +68,6 @@ abstract class ControllerAbstract
 			}
 		}
 
-		return $sorted_tasks;
+		return $sortedTasks;
 	}
 }
