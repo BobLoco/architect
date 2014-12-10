@@ -31,7 +31,9 @@ abstract class ControllerAbstract
     {
         $this->container = $container;
 
-        if (empty($this->container['entity_manager']) || !($this->container['entity_manager'] instanceof \Architect\ORM\EntityManagerInterface)) {
+        if (empty($this->container['entity_manager']) ||
+        	!($this->container['entity_manager'] instanceof \Architect\ORM\EntityManagerInterface)
+        ) {
             throw new \LogicException('No entity manager set');
         }
 

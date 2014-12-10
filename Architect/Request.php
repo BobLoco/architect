@@ -37,7 +37,7 @@ class Request {
         // For some reason Slim's middleware doesn't work :-(
         if (!is_array($this->requestData)) {
             $this->requestData = json_decode($this->requestData, true);
-            
+
             if (json_last_error() !== JSON_ERROR_NONE) {
                 parse_str($this->requestData, $this->requestData);
             }

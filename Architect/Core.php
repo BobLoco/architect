@@ -67,12 +67,18 @@ class Core extends ArchitectAbstract
         });
 
         self::$app->put('/:class', function ($class) {
-            throw new \RuntimeException('A resource identifier must be specified when using PUT', ResponseCode::ERROR_NOMETHOD);
+            throw new \RuntimeException(
+                'A resource identifier must be specified when using PUT',
+                ResponseCode::ERROR_NOMETHOD
+            );
         });
 
         // POST requests
         self::$app->post('/:class/:identifier', function ($class, $identifier) {
-            throw new \RuntimeException('A resource identifier cannot be specified when using POST', ResponseCode::ERROR_NOMETHOD);
+            throw new \RuntimeException(
+                'A resource identifier cannot be specified when using POST',
+                ResponseCode::ERROR_NOMETHOD
+            );
         });
 
         self::$app->post('/:class', function ($class) {
@@ -85,7 +91,10 @@ class Core extends ArchitectAbstract
         });
 
         self::$app->delete('/:class', function ($class) {
-            throw new \RuntimeException('A resource identifier must be specified when using DELETE', ResponseCode::ERROR_NOMETHOD);
+            throw new \RuntimeException(
+                'A resource identifier must be specified when using DELETE',
+                ResponseCode::ERROR_NOMETHOD
+            );
         });
 
         // OPTIONS requests
