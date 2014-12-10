@@ -17,7 +17,7 @@ use \Doctrine\Common\Collections\ArrayCollection;
  */
 class App
 {
-    /** 
+    /**
      * The ID of the app
      * @var int
      * @Id

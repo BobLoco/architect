@@ -158,7 +158,8 @@ class Core extends ArchitectAbstract
      * @param array $data The data
      * @param int $code The response code
      */
-    private function displayResponse($data, $code) {
+    private function displayResponse($data, $code)
+    {
         // Default to 200 if all else fails
         if (empty($code)) {
             $code = ResponseCode::OK;

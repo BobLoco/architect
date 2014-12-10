@@ -13,7 +13,8 @@ use \Architect\ResponseCode;
  * @package Architect
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
-class Request {
+class Request
+{
 
     /**
      * Master key

@@ -17,7 +17,7 @@ use \Doctrine\Common\Collections\ArrayCollection;
  */
 class Context
 {
-    /** 
+    /**
      * The ID of the context
      * @var int
      * @Id

@@ -11,6 +11,7 @@ namespace Architect\ORM;
  * @subpackage ORM
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
-interface EntityManagerInterface {
+interface EntityManagerInterface
+{
     public function createManager();
 }

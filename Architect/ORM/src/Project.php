@@ -17,7 +17,7 @@ use \Doctrine\Common\Collections\ArrayCollection;
  */
 class Project
 {
-    /** 
+    /**
      * The ID of the project
      * @var int
      * @Id
