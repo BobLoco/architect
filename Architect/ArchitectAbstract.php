@@ -1,21 +1,17 @@
 <?php
-
 namespace Architect;
 
+/**
+ * Architect\ArchitectAbstract
+ *
+ * Abstract for Architect core
+ *
+ * @category Architect
+ * @package Architect
+ * @subpackage Architect
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 abstract class ArchitectAbstract
 {
-    protected $params = array();
 
-    protected static $_app;
-
-    public function setParams($params)
-    {
-        // @TODO: Add clean-up here
-        $this->params = $params;
-    }
-
-    public function getParams()
-    {
-        return $this->params;
-    }
 }
