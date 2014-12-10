@@ -17,57 +17,57 @@ use Pimple\Container;
  */
 abstract class ControllerAbstract
 {
-	protected $orm;
+    protected $orm;
 
-	protected $request;
+    protected $request;
 
-	protected $container;
+    protected $container;
 
-	/**
-	 * Constructor
-	 * @throws \LogicException
-	 */
-	public function __construct(Container $container)
-	{
-		$this->container = $container;
+    /**
+     * Constructor
+     * @throws \LogicException
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
 
-		if (empty($this->container['entity_manager']) || !($this->container['entity_manager'] instanceof \Architect\ORM\EntityManagerInterface)) {
-			throw new \LogicException('No entity manager set');
-		}
+        if (empty($this->container['entity_manager']) || !($this->container['entity_manager'] instanceof \Architect\ORM\EntityManagerInterface)) {
+            throw new \LogicException('No entity manager set');
+        }
 
-		$this->orm = $this->container['entity_manager']->createManager();
-	}
+        $this->orm = $this->container['entity_manager']->createManager();
+    }
 
-	/**
-	 * Process the tasks associated with the project or context
-	 * @param  ArrayCollection $tasks
-	 * @return array
-	 */
-	protected function returnTasks($tasks)
-	{
-		$sortedTasks = array();
+    /**
+     * Process the tasks associated with the project or context
+     * @param  ArrayCollection $tasks
+     * @return array
+     */
+    protected function returnTasks($tasks)
+    {
+        $sortedTasks = array();
 
-		if (!empty($tasks)) {
-			foreach ($tasks as $task) {
-				$context = $task->getContext();
-				$project = $task->getProject();
+        if (!empty($tasks)) {
+            foreach ($tasks as $task) {
+                $context = $task->getContext();
+                $project = $task->getProject();
 
-				$sortedTasks[] = array(
-					'task_id' => $task->getId(),
-					'task_name' => $task->getTaskName(),
-					'completed' => $task->getCompleted(),
-					'context' => !empty($context) ? array(
-						'context_id' => $context->getId(),
-						'context_name' => $context->getContextName(),
-					) : null,
-					'project' => !empty($project) ? array(
-						'project_id' => $project->getId(),
-						'project_name' => $project->getProjectName(),
-					) : null,
-				);
-			}
-		}
+                $sortedTasks[] = array(
+                    'task_id' => $task->getId(),
+                    'task_name' => $task->getTaskName(),
+                    'completed' => $task->getCompleted(),
+                    'context' => !empty($context) ? array(
+                        'context_id' => $context->getId(),
+                        'context_name' => $context->getContextName(),
+                    ) : null,
+                    'project' => !empty($project) ? array(
+                        'project_id' => $project->getId(),
+                        'project_name' => $project->getProjectName(),
+                    ) : null,
+                );
+            }
+        }
 
-		return $sortedTasks;
-	}
+        return $sortedTasks;
+    }
 }
