@@ -29,7 +29,7 @@ class ProjectsSpec extends ObjectBehavior
     /**
      * Check whether project class is initializable
      */
-    public function it_is_initializable()
+    public function itIsInitializable()
     {
         $this->shouldHaveType('Architect\Controllers\Projects');
     }
