@@ -16,12 +16,19 @@ use Prophecy\Argument;
  */
 class ProjectsSpec extends ObjectBehavior
 {
-	public function let($container)
-	{
-		$container->beADoubleOf('Pimple\Container');
-		$this->beConstructedWith($container);
-	}
+    /**
+     * IoC Container set-up
+     * @param Pimple\Container $container
+     */
+    public function let($container)
+    {
+        $container->beADoubleOf('Pimple\Container');
+        $this->beConstructedWith($container);
+    }
 
+    /**
+     * Check whether project class is initializable
+     */
     public function it_is_initializable()
     {
         $this->shouldHaveType('Architect\Controllers\Projects');
