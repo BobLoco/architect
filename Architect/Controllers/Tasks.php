@@ -136,14 +136,14 @@ class Tasks extends ControllerAbstract
         $project = $task->getProject();
 
         return new Result(
-                        array(
+            array(
                 'task_id' => $task->getId(),
                 'task_name' => $task->getTaskName(),
                 'context' => !empty($context) ? $this->returnContext($context) : false,
                 'project' => !empty($project) ? $this->returnProject($project) : false,
                 'due' => !empty($due) ? $due : false,
                 'completed' => !empty($completed) ? $completed : false,
-            )
+                        )
         );
     }
 
