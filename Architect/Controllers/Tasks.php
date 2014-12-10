@@ -32,43 +32,21 @@ class Tasks extends ControllerAbstract
                 return new Result(array('message' => 'Task not found'), ResponseCode::ERROR_NOTFOUND);
             }
 
-            $completed = $task->getCompleted();
-            $due = $task->getDue();
-            $context = $task->getContext();
-            $project = $task->getProject();
+            $formatted = $this->getTaskDetails($task);
 
-            return new Result(array(
-                'task_id' => $task->getId(),
-                'task_name' => $task->getTaskName(),
-                'context' => !empty($context) ? $this->returnContext($context) : false,
-                'project' => !empty($project) ? $this->returnProject($project) : false,
-                'due' => !empty($due) ? $due : false,
-                'completed' => !empty($completed) ? $completed : false,
-            ));
-        } else {
-            $repository = $this->orm->getRepository('\Architect\ORM\src\Task');
-            $tasks = $repository->findAll();
-
-            $result = array();
-
-            foreach ($tasks as $task) {
-                $completed = $task->getCompleted();
-                $due = $task->getDue();
-                $context = $task->getContext();
-                $project = $task->getProject();
-
-                $result[] = array(
-                    'task_id' => $task->getId(),
-                    'task_name' => $task->getTaskName(),
-                    'context' => !empty($context) ? $this->returnContext($context) : false,
-                    'project' => !empty($project) ? $this->returnProject($project) : false,
-                    'due' => !empty($due) ? $due : false,
-                    'completed' => !empty($completed) ? $completed : false,
-                );
-            }
-
-            return new Result($result);
+            return new Result($formatted);
         }
+
+        $repository = $this->orm->getRepository('\Architect\ORM\src\Task');
+        $tasks = $repository->findAll();
+
+        $result = array();
+
+        foreach ($tasks as $task) {
+            $result[] = $this->getTaskDetails($task);
+        }
+
+        return new Result($result);
     }
 
     /**
@@ -82,16 +60,16 @@ class Tasks extends ControllerAbstract
         $task->setDue($this->container['request']->get('due'));
         $task->setCompleted($this->container['request']->get('completed'));
 
-        $context_id = $this->container['request']->get('context_id');
-        $project_id = $this->container['request']->get('project_id');
+        $contextId = $this->container['request']->get('context_id');
+        $projectId = $this->container['request']->get('project_id');
 
-        if (!empty($context_id)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
+        if (!empty($contextId)) {
+            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
             $task->setContext($context);
         }
 
-        if (!empty($project_id)) {
-            $project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
+        if (!empty($projectId)) {
+            $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
             $task->setProject($project);
         }
 
@@ -128,18 +106,18 @@ class Tasks extends ControllerAbstract
             return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
         }
 
-        $context_id = $this->container['request']->get('context_id');
-        $project_id = $this->container['request']->get('project_id');
+        $contextId = $this->container['request']->get('context_id');
+        $projectId = $this->container['request']->get('project_id');
 
-        if (!empty($context_id)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
+        if (!empty($contextId)) {
+            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
             $task->setContext($context);
         } else {
             $task->setContext(null);
         }
 
-        if (!empty($project_id)) {
-            $project = $this->orm->find('\Architect\ORM\src\Project', $project_id);
+        if (!empty($projectId)) {
+            $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
             $task->setProject($project);
         } else {
             $task->setProject(null);
@@ -189,6 +167,28 @@ class Tasks extends ControllerAbstract
             array(
                 'success' => true,
             )
+        );
+    }
+
+    /**
+     * Get the details of the task
+     * @param array $task The task
+     * @return array The formatted task
+     */
+    private function getTaskDetails($task)
+    {
+        $completed = $task->getCompleted();
+        $due = $task->getDue();
+        $context = $task->getContext();
+        $project = $task->getProject();
+
+        return array(
+            'task_id' => $task->getId(),
+            'task_name' => $task->getTaskName(),
+            'context' => !empty($context) ? $this->returnContext($context) : false,
+            'project' => !empty($project) ? $this->returnProject($project) : false,
+            'due' => !empty($due) ? $due : false,
+            'completed' => !empty($completed) ? $completed : false,
         );
     }
 
