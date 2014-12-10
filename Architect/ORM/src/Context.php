@@ -21,7 +21,7 @@ class Context
      * The ID of the context
      * @var int
      * @Id
-     * @Column(type="integer")
+     * @Column(type="integer", name="context_id")
      * @GeneratedValue
      */
     protected $contextId;
@@ -29,7 +29,7 @@ class Context
     /**
      * The name of the context
      * @var string
-     * @Column(type="string")
+     * @Column(type="string", name="context_name")
      */
     protected $contextName;
 

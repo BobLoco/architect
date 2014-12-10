@@ -21,7 +21,7 @@ class Project
      * The ID of the project
      * @var int
      * @Id
-     * @Column(type="integer")
+     * @Column(type="integer", name="project_id")
      * @GeneratedValue
      */
     protected $projectId;
@@ -29,14 +29,14 @@ class Project
     /**
      * The name of the project
      * @var string
-     * @Column(type="string")
+     * @Column(type="string", name="project_name")
      */
     protected $projectName;
 
     /**
      * The description / goal of the project
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type="string", nullable=true, name="project_description")
      */
     protected $projectDescription;
 
@@ -59,14 +59,14 @@ class Project
     /**
      * Created timestamp
      * @var DateTime
-     * @Column(type="datetime")
+     * @Column(type="datetime", name="created")
      */
     private $created;
 
     /**
      * Updated timestamp
      * @var DateTime
-     * @Column(type="datetime")
+     * @Column(type="datetime", name="updated")
      */
     private $updated;
 

@@ -19,7 +19,7 @@ class Task
      * The id of the task
      * @var int
      * @Id
-     * @Column(type="integer")
+     * @Column(type="integer", name="task_id")
      * @GeneratedValue
      */
     protected $taskId;
@@ -27,21 +27,21 @@ class Task
     /**
      * The name of the task
      * @var string
-     * @Column(type="string")
+     * @Column(type="string", name="task_name")
      */
     protected $taskName;
 
     /**
      * The datetime the task is due
      * @var DateTime
-     * @Column(type="datetime", nullable=true)
+     * @Column(type="datetime", nullable=true, name="due")
      */
     protected $due;
 
     /**
      * The datetime the task was completed
      * @var DateTime
-     * @Column(type="datetime", nullable=true)
+     * @Column(type="datetime", nullable=true, name="completed")
      */
     protected $completed;
 
@@ -64,7 +64,7 @@ class Task
     /**
      * The order of the task
      * @var int
-     * @Column(type="integer", nullable=true)
+     * @Column(type="integer", nullable=true, name="order")
      */
     private $order;
 

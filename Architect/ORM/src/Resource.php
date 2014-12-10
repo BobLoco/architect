@@ -19,7 +19,7 @@ class Resource
      * The id of the resource
      * @var int
      * @Id
-     * @Column(type="integer")
+     * @Column(type="integer", name="resource_id")
      * @GeneratedValue
      */
     protected $resourceId;
@@ -27,14 +27,14 @@ class Resource
     /**
      * The name of the resource
      * @var string
-     * @Column(type="string")
+     * @Column(type="string", name="resource_name")
      */
     protected $resourceName;
 
     /**
      * The content of the resource (e.g. url)
      * @var string
-     * @Column(type="string")
+     * @Column(type="string", name="content")
      */
     protected $content;
 

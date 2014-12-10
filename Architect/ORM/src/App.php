@@ -21,7 +21,7 @@ class App
      * The ID of the app
      * @var int
      * @Id
-     * @Column(type="integer")
+     * @Column(type="integer", name="app_id")
      * @GeneratedValue
      */
     protected $appId;
@@ -29,21 +29,21 @@ class App
     /**
      * The name of the app
      * @var string
-     * @Column(type="string")
+     * @Column(type="string", name="app_name")
      */
     protected $appName;
 
     /**
      * The URL of the app
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type="string", nullable=true, name="app_url")
      */
     protected $appUrl;
 
     /**
      * The app secret
      * @var string
-     * @Column(type="string")
+     * @Column(type="string", name="app_secret")
      */
     protected $appSecret;
 
