@@ -143,7 +143,7 @@ class Tasks extends ControllerAbstract
                 'project' => !empty($project) ? $this->returnProject($project) : false,
                 'due' => !empty($due) ? $due : false,
                 'completed' => !empty($completed) ? $completed : false,
-                        )
+            )
         );
     }
 
