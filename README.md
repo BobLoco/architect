@@ -1,7 +1,7 @@
 Architect
 =========
 
-[![Codacy Badge](https://www.codacy.com/project/badge/578cf2715e6c4a8ba09ebf73ac9b8a6e)](https://www.codacy.com/public/roblowcock/architect)
+[![Codacy Badge](https://www.codacy.com/project/badge/578cf2715e6c4a8ba09ebf73ac9b8a6e)](https://www.codacy.com/public/roblowcock/architect) [![Build Status](https://travis-ci.org/BobLoco/architect.svg?branch=master)](https://travis-ci.org/BobLoco/architect)
 
 A basic backend for managing to-do lists
 
