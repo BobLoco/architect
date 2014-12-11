@@ -97,7 +97,9 @@ class Core extends ArchitectAbstract
         // OPTIONS requests
         $this->container['slim']->options('/(:name+)', function () {
             $this->container['request']->validate();
-            $this->container['slim']->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+            $this->container['slim']
+                ->response()
+                ->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
             $this->container['slim']->response()->header('Access-Control-Allow-Headers', 'Content-Type');
         });
     }

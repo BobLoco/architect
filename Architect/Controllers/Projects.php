@@ -104,7 +104,7 @@ class Projects extends ControllerAbstract
         $this->orm->flush();
 
         $container['slim']->response->headers->set(
-            'Location', 
+            'Location',
             $container['slim']->request->getPath() . '/' . $project->getId()
         );
 
