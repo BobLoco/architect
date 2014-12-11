@@ -1,6 +1,8 @@
 <?php
 namespace Architect;
 
+use \Pimple\Container;
+
 /**
  * Architect\Result
  *
@@ -13,8 +15,8 @@ namespace Architect;
 class Result extends ArchitectAbstract
 {
     private $code;
-    private $data;
-    private $message;
+    private $data = null;
+    private $message = null;
 
     /**
      * Constructor
@@ -22,11 +24,18 @@ class Result extends ArchitectAbstract
      * @param array $data The data to be output
      * @param string $message An optional debug message to be passed
      */
-    public function __construct($data = null, $code = ResponseCode::OK, $message = null)
+    public function __construct(Container $container)
     {
-        $this->code = $code;
-        $this->data = $data;
-        $this->message = $message;
+        $this->code = $container['response_code']::OK;
+    }
+
+    /**
+     * Set the response code
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = (int) $code;
     }
 
     /**
@@ -39,12 +48,40 @@ class Result extends ArchitectAbstract
     }
 
     /**
+     * Set the data of the response
+     * @param array $data
+     * @throws \LogicException
+     */
+    public function setData($data)
+    {
+        if (!is_array($data)) {
+            throw new \LogicException('Data is not an array');
+        }
+
+        $this->data = $data;
+    }
+
+    /**
      * Get the data of the response
      * @return array
      */
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Set any debug message
+     * @param string $message
+     * @throws \LogicException
+     */
+    public function setMessage($message)
+    {
+        if (!is_string($message)) {
+            throw new \LogicException('Message is not a string');
+        }
+
+        $this->message = $message;
     }
 
     /**

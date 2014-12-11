@@ -26,16 +26,22 @@ class Projects extends ControllerAbstract
      */
     public function read($projectId = null)
     {
+        // This is ugly, but we have to do this to prevent an
+        // unexpected T_PAAMAIYM_NEKUDOTAYIM
+        $container = $this->container;
+
         if (!empty($projectId)) {
             $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
 
             if (empty($project)) {
-                return new Result(array('message' => 'Project not found'), ResponseCode::ERROR_NOTFOUND);
+                $container['result']->setData(array('message' => 'Project not found'));
+                $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+                return $container['result'];
             }
 
             $context = $project->getContext();
 
-            return new Result(array(
+            $container['result']->setData(array(
                 'project_id' => $project->getId(),
                 'project_name' => $project->getProjectName(),
                 'project_description' => $project->getProjectDescription(),
@@ -44,27 +50,30 @@ class Projects extends ControllerAbstract
                 'created' => $project->getCreated(),
                 'updated' => $project->getUpdated(),
             ));
-        } else {
-            $repository = $this->orm->getRepository('\Architect\ORM\src\Project');
-            $projects = $repository->findAll();
 
-            $result = array();
-
-            foreach ($projects as $project) {
-                $context = $project->getContext();
-
-                $result[] = array(
-                    'project_id' => $project->getId(),
-                    'project_name' => $project->getProjectName(),
-                    'project_description' => $project->getProjectDescription(),
-                    'context' => !empty($context) ? $context : false,
-                    'created' => $project->getCreated(),
-                    'updated' => $project->getUpdated(),
-                );
-            }
-
-            return new Result($result);
+            return $container['result'];
         }
+
+        $repository = $this->orm->getRepository('\Architect\ORM\src\Project');
+        $projects = $repository->findAll();
+
+        $result = array();
+
+        foreach ($projects as $project) {
+            $context = $project->getContext();
+
+            $result[] = array(
+                'project_id' => $project->getId(),
+                'project_name' => $project->getProjectName(),
+                'project_description' => $project->getProjectDescription(),
+                'context' => !empty($context) ? $context : false,
+                'created' => $project->getCreated(),
+                'updated' => $project->getUpdated(),
+            );
+        }
+
+        $container['result']->setData($result);
+        return $container['result'];
     }
 
     /**
@@ -73,10 +82,13 @@ class Projects extends ControllerAbstract
      */
     public function create()
     {
-        $project = new Project();
-        $project->setProjectName($this->container['request']->get('project_name'));
-        $project->setProjectDescription($this->container['request']->get('project_description'));
-        $context_id = $this->container['request']->get('context_id');
+        $container = $this->container;
+
+        $project = $container['project'];
+
+        $project->setProjectName($container['request']->get('project_name'));
+        $project->setProjectDescription($container['request']->get('project_description'));
+        $context_id = $container['request']->get('context_id');
 
         if (!empty($context_id)) {
             $context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
@@ -91,15 +103,18 @@ class Projects extends ControllerAbstract
         $this->orm->persist($project);
         $this->orm->flush();
 
-        Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $project->getId());
-
-        return new Result(
-            array(
-                'project_id' => $project->getId(),
-                'project_name' => $project->getProjectName(),
-            ),
-            ResponseCode::OK_CREATED
+        $container['slim']->response->headers->set(
+            'Location', 
+            $container['slim']->request->getPath() . '/' . $project->getId()
         );
+
+        $container['result']->setData(array(
+            'project_id' => $project->getId(),
+            'project_name' => $project->getProjectName(),
+        ));
+        $container['result']->setCode($container['response_code']::OK_CREATED);
+
+        return $container['result'];
     }
 
     /**
@@ -109,10 +124,15 @@ class Projects extends ControllerAbstract
      */
     public function update($projectId)
     {
+        $container = $this->container;
+
         $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
 
         if (empty($project)) {
-            return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
+            $container['result']->setData(array('message' => 'Context not found'));
+            $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+
+            return $container['result'];
         }
 
         $context_id = $this->container['request']->get('context_id');
@@ -131,12 +151,14 @@ class Projects extends ControllerAbstract
         $this->orm->persist($project);
         $this->orm->flush();
 
-        return new Result(
+        $container['result']->setData(
             array(
                 'project_id' => $project->getId(),
                 'project_name' => $project->getProjectName(),
             )
         );
+
+        return $container['result'];
     }
 
     /**
@@ -146,19 +168,23 @@ class Projects extends ControllerAbstract
      */
     public function delete($projectId)
     {
+        $container = $this->container;
         $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
 
         if (empty($project)) {
-            return new Result(array('message' => 'Project not found'), ResponseCode::ERROR_NOTFOUND);
+            $container['result']->setData(array('message' => 'Context not found'));
+            $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+
+            return $container['result'];
         }
 
         $this->orm->remove($project);
         $this->orm->flush();
 
-        return new Result(
-            array(
-                'success' => true,
-            )
-        );
+        $container['result']->setData(array(
+            'success' => true,
+        ));
+
+        return $container['result'];
     }
 }

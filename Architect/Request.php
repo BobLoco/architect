@@ -3,6 +3,7 @@ namespace Architect;
 
 use \Architect\ORM\EntityManager;
 use \Architect\ResponseCode;
+use \Pimple\Container;
 
 /**
  * Architect\Request
@@ -28,11 +29,18 @@ class Request
     private $requestData = array();
 
     /**
+     * DI container
+     * @var Container
+     */
+    private $container;
+
+    /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(Container $container)
     {
-        $this->requestData = \Architect\Core::$app->request()->getBody();
+        $this->requestData = $container['slim']->request()->getBody();
+        $this->container = $container;
 
         // Total hack to clean-up request data
         // For some reason Slim's middleware doesn't work :-(
@@ -52,7 +60,7 @@ class Request
     public function validate()
     {
         // Grab the parameters from the request
-        $params = \Architect\Core::$app->request()->params();
+        $params = $this->container['slim']->request()->params();
 
         if (empty($params['secret'])) {
             throw new \RuntimeException('No application secret set', ResponseCode::ERROR_BADREQUEST);
@@ -61,14 +69,14 @@ class Request
         $secret = $params['secret'];
 
         if ($secret == self::MASTER) {
-            \Architect\Core::$app->response()->header('Access-Control-Allow-Origin', '*');
+            $this->container['slim']->response()->header('Access-Control-Allow-Origin', '*');
             return true;
         } else {
             if (empty($params['app_id'])) {
                 throw new \RuntimeException('No application ID set', ResponseCode::ERROR_BADREQUEST);
             }
 
-            $entityManager = new EntityManager();
+            $entityManager = $this->container['entity_manager'];
             $orm = $entityManager->createManager();
 
             $appId = (int) $params['app_id'];
@@ -82,7 +90,7 @@ class Request
             $storedSecret = $app->getAppSecret();
 
             if ($params['secret'] === $storedSecret) {
-                \Architect\Core::$app->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
+                $this->container['slim']->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
                 return true;
             } else {
                 throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);

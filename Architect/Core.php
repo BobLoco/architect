@@ -17,19 +17,14 @@ class Core extends ArchitectAbstract
 {
     public static $app;
 
-    protected $container;
-
     /**
      * Constructor
      */
     public function __construct(Container $container)
     {
-        // Create the Slim object
-        self::$app = new Slim(array('debug' => false));
-
         // Optimistically add the ContentTypes middleware
         // This doesn't seem to work yet
-        self::$app->add(new \Slim\Middleware\ContentTypes());
+        $container['slim']->add(new \Slim\Middleware\ContentTypes());
 
         // Set the container to be available to the core
         $this->container = $container;
@@ -42,7 +37,9 @@ class Core extends ArchitectAbstract
     public function routes()
     {
         // Handle any exceptions
-        self::$app->error(function (\Exception $exception) {
+        $this->container['slim']->error(function (\Exception $exception) {
+            var_dump($exception);
+
             $data = array(
                 'Message' => $exception->getMessage(),
                 'Code' => $exception->getCode(),
@@ -53,20 +50,20 @@ class Core extends ArchitectAbstract
         });
 
         // GET requests
-        self::$app->get('/:class/:identifier', function ($class, $identifier) {
+        $this->container['slim']->get('/:class/:identifier', function ($class, $identifier) {
             $this->respond($class, 'read', $identifier);
         });
 
-        self::$app->get('/:class', function ($class) {
+        $this->container['slim']->get('/:class', function ($class) {
             $this->respond($class, 'read');
         });
 
         // PUT requests
-        self::$app->put('/:class/:identifier', function ($class, $identifier) {
+        $this->container['slim']->put('/:class/:identifier', function ($class, $identifier) {
             $this->respond($class, 'update', $identifier);
         });
 
-        self::$app->put('/:class', function ($class) {
+        $this->container['slim']->put('/:class', function ($class) {
             throw new \RuntimeException(
                 'A resource identifier must be specified when using PUT',
                 ResponseCode::ERROR_NOMETHOD
@@ -74,23 +71,23 @@ class Core extends ArchitectAbstract
         });
 
         // POST requests
-        self::$app->post('/:class/:identifier', function ($class, $identifier) {
+        $this->container['slim']->post('/:class/:identifier', function ($class, $identifier) {
             throw new \RuntimeException(
                 'A resource identifier cannot be specified when using POST',
                 ResponseCode::ERROR_NOMETHOD
             );
         });
 
-        self::$app->post('/:class', function ($class) {
+        $this->container['slim']->post('/:class', function ($class) {
             $this->respond($class, 'create');
         });
 
         // DELETE requests
-        self::$app->delete('/:class/:identifier', function ($class, $identifier) {
+        $this->container['slim']->delete('/:class/:identifier', function ($class, $identifier) {
             $this->respond($class, 'delete', $identifier);
         });
 
-        self::$app->delete('/:class', function ($class) {
+        $this->container['slim']->delete('/:class', function ($class) {
             throw new \RuntimeException(
                 'A resource identifier must be specified when using DELETE',
                 ResponseCode::ERROR_NOMETHOD
@@ -98,10 +95,10 @@ class Core extends ArchitectAbstract
         });
 
         // OPTIONS requests
-        self::$app->options('/(:name+)', function () {
+        $this->container['slim']->options('/(:name+)', function () {
             $this->container['request']->validate();
-            self::$app->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-            self::$app->response()->header('Access-Control-Allow-Headers', 'Content-Type');
+            $this->container['slim']->response()->header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+            $this->container['slim']->response()->header('Access-Control-Allow-Headers', 'Content-Type');
         });
     }
 
@@ -122,7 +119,7 @@ class Core extends ArchitectAbstract
 
         // 404 if the class doesn't exist
         if (!class_exists($fullclass)) {
-            self::$app->halt(404);
+            $this->container['slim']->halt(404);
         }
 
         // Otherwise, instantiate it and pass it the container
@@ -166,7 +163,7 @@ class Core extends ArchitectAbstract
         }
 
         // Get the response from Slim
-        $response = self::$app->response();
+        $response = $this->container['slim']->response();
 
         // Set the headers
         $response->header('Access-Control-Allow-Origin', '*');
