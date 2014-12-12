@@ -25,33 +25,40 @@ class Contexts extends ControllerAbstract
      */
     public function read($contextId = null)
     {
+        $container = $this->container;
+
         if (!empty($contextId)) {
             $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
 
             if (empty($context)) {
-                return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
+                $container['result']->setData(array('message' => 'Context not found'));
+                $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+                return $container['result'];
             }
 
-            return new Result(array(
+            $container['result']->setData(array(
                 'context_id' => $context->getId(),
                 'context_name' => $context->getContextName(),
                 'tasks' => $this->returnTasks($context->getTasks()),
             ));
-        } else {
-            $repository = $this->orm->getRepository('\Architect\ORM\src\Context');
-            $contexts = $repository->findAll();
-
-            $result = array();
-
-            foreach ($contexts as $context) {
-                $result[] = array(
-                    'context_id' => $context->getId(),
-                    'context_name' => $context->getContextName(),
-                );
-            }
-
-            return new Result($result);
+            return $container['result'];
         }
+
+        $repository = $this->orm->getRepository('\Architect\ORM\src\Context');
+        $contexts = $repository->findAll();
+
+        $result = array();
+
+        foreach ($contexts as $context) {
+            $result[] = array(
+                'context_id' => $context->getId(),
+                'context_name' => $context->getContextName(),
+            );
+        }
+
+        $container['result']->setData($result);
+
+        return $container['result'];
     }
 
     /**
@@ -60,21 +67,27 @@ class Contexts extends ControllerAbstract
      */
     public function create()
     {
-        $context = new Context();
-        $context->setContextName($this->container['request']->get('context_name'));
+        $container = $this->container;
+        $context = $container['context'];
+        $context->setContextName($container['request']->get('context_name'));
 
         $this->orm->persist($context);
         $this->orm->flush();
 
-        Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $context->getId());
+        $container['slim']->response->headers->set(
+            'Location',
+            $container['slim']->request->getPath() . '/' . $context->getId()
+        );
 
-        return new Result(
+        $container['result']->setCode($container['response_code']::OK_CREATED);
+        $container['result']->setData(
             array(
                 'context_id' => $context->getId(),
                 'context_name' => $context->getContextName(),
-            ),
-            ResponseCode::OK_CREATED
+            )
         );
+
+        return $container['result'];
     }
 
     /**
@@ -84,22 +97,28 @@ class Contexts extends ControllerAbstract
      */
     public function update($contextId)
     {
+        $container = $this->container;
         $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
 
         if (empty($context)) {
-            return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
+            $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+            $container['result']->setData(array('message' => 'Context not found'));
+
+            return $container['result'];
         }
 
-        $context->setContextName($this->container['request']->get('context_name'));
+        $context->setContextName($container['request']->get('context_name'));
         $this->orm->persist($context);
         $this->orm->flush();
 
-        return new Result(
+        $container['result']->setData(
             array(
                 'context_id' => $context->getId(),
                 'context_name' => $context->getContextName(),
             )
         );
+
+        return $container['result'];
     }
 
     /**
@@ -109,19 +128,23 @@ class Contexts extends ControllerAbstract
      */
     public function delete($contextId)
     {
+        $container = $this->container;
         $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
 
         if (empty($context)) {
-            return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
+            $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+            $container['result']->setData(array('message' => 'Context not found'));
+            return $container['result'];
         }
 
         $this->orm->remove($context);
         $this->orm->flush();
 
-        return new Result(
+        $container['result']->setData(
             array(
                 'success' => true,
             )
         );
+        return $container['result'];
     }
 }
