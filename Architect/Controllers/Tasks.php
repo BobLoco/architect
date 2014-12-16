@@ -69,38 +69,20 @@ class Tasks extends ControllerAbstract
         $task->setDue($this->container['request']->get('due'));
         $task->setCompleted($this->container['request']->get('completed'));
 
-        $contextId = $this->container['request']->get('context_id');
-        $projectId = $this->container['request']->get('project_id');
-
-        if (!empty($contextId)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
-            $task->setContext($context);
-        }
-
-        if (!empty($projectId)) {
-            $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
-            $task->setProject($project);
-        }
+        $this->setContext($task);
+        $this->setProject($task);
 
         $this->orm->persist($task);
         $this->orm->flush();
-
 
         $container['slim']->response->headers->set(
             'Location',
             $container['slim']->request->getPath() . '/' . $task->getId()
         );
 
-        $due = $task->getDue();
-        $completed = $task->getCompleted();
+        $formatted = $this->getTaskDetails($task);
 
-        $container['result']->setData(array(
-            'task_id' => $task->getId(),
-            'task_name' => $task->getTaskName(),
-            'context' => !empty($context) ? $this->returnContext($context) : false,
-            'due' => !empty($due) ? $due : false,
-            'completed' => !empty($completed) ? $completed : false,
-        ));
+        $container['result']->setData($formatted);
         $container['result']->setCode($container['response_code']::OK_CREATED);
 
         return $container['result'];
@@ -123,24 +105,8 @@ class Tasks extends ControllerAbstract
             return $container['result'];
         }
 
-        $contextId = $this->container['request']->get('context_id');
-        $projectId = $this->container['request']->get('project_id');
-
-        $context = null;
-
-        if (!empty($contextId)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
-        }
-
-        $task->setContext($context);
-
-        $project = null;
-
-        if (!empty($projectId)) {
-            $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
-        }
-
-        $task->setProject($project);
+        $this->setContext($task);
+        $this->setProject($task);
 
         $task->setTaskName($container['request']->get('task_name'));
 
@@ -149,21 +115,9 @@ class Tasks extends ControllerAbstract
         $this->orm->persist($task);
         $this->orm->flush();
 
-        $due = $task->getDue();
-        $completed = $task->getCompleted();
-        $context = $task->getContext();
-        $project = $task->getProject();
+        $formatted = $this->getTaskDetails($task);
 
-        $container['result']->setData(
-            array(
-                'task_id' => $task->getId(),
-                'task_name' => $task->getTaskName(),
-                'context' => !empty($context) ? $this->returnContext($context) : false,
-                'project' => !empty($project) ? $this->returnProject($project) : false,
-                'due' => !empty($due) ? $due : false,
-                'completed' => !empty($completed) ? $completed : false,
-            )
-        );
+        $container['result']->setData($formatted);
 
         return $container['result'];
     }
@@ -243,5 +197,39 @@ class Tasks extends ControllerAbstract
             'project_id' => $project->getId(),
             'project_name' => $project->getProjectName(),
         );
+    }
+
+    /**
+     * Set the context of the task
+     * @param Architect\ORM\src\Task $task
+     */
+    private function setContext($task)
+    {
+        $contextId = $this->container['request']->get('context_id');
+
+        $context = null;
+
+        if (!empty($contextId)) {
+            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
+        }
+
+        $task->setContext($context);
+    }
+
+    /**
+     * Set the project of the task
+     * @param Architect\ORM\src\Task $task
+     */
+    private function setProject($projectId, $task)
+    {
+        $projectId = $this->container['request']->get('project_id');
+
+        $project = null;
+
+        if (!empty($projectId)) {
+            $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
+        }
+
+        $task->setProject($project);
     }
 }
