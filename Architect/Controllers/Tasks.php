@@ -25,16 +25,21 @@ class Tasks extends ControllerAbstract
      */
     public function read($taskId = null)
     {
+        $container = $this->container;
+
         if (!empty($taskId)) {
             $task = $this->orm->find('\Architect\ORM\src\Task', $taskId);
 
             if (empty($task)) {
-                return new Result(array('message' => 'Task not found'), ResponseCode::ERROR_NOTFOUND);
+                $container['result']->setData(array('message' => 'Task not found'));
+                $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+                return $container['result'];
             }
 
             $formatted = $this->getTaskDetails($task);
+            $container['result']->setData($formatted);
 
-            return new Result($formatted);
+            return $container['result'];
         }
 
         $repository = $this->orm->getRepository('\Architect\ORM\src\Task');
@@ -46,7 +51,9 @@ class Tasks extends ControllerAbstract
             $result[] = $this->getTaskDetails($task);
         }
 
-        return new Result($result);
+        $container['result']->setData($result);
+
+        return $container['result'];
     }
 
     /**
@@ -55,7 +62,9 @@ class Tasks extends ControllerAbstract
      */
     public function create()
     {
-        $task = new Task();
+        $container = $this->container;
+
+        $task = $container['task'];
         $task->setTaskName($this->container['request']->get('task_name'));
         $task->setDue($this->container['request']->get('due'));
         $task->setCompleted($this->container['request']->get('completed'));
@@ -76,21 +85,25 @@ class Tasks extends ControllerAbstract
         $this->orm->persist($task);
         $this->orm->flush();
 
-        Core::$app->response->headers->set('Location', Core::$app->request->getPath() . '/' . $task->getId());
+
+        $container['slim']->response->headers->set(
+            'Location',
+            $container['slim']->request->getPath() . '/' . $task->getId()
+        );
 
         $due = $task->getDue();
         $completed = $task->getCompleted();
 
-        return new Result(
-            array(
-                'task_id' => $task->getId(),
-                'task_name' => $task->getTaskName(),
-                'context' => !empty($context) ? $this->returnContext($context) : false,
-                'due' => !empty($due) ? $due : false,
-                'completed' => !empty($completed) ? $completed : false,
-            ),
-            ResponseCode::OK_CREATED
-        );
+        $container['result']->setData(array(
+            'task_id' => $task->getId(),
+            'task_name' => $task->getTaskName(),
+            'context' => !empty($context) ? $this->returnContext($context) : false,
+            'due' => !empty($due) ? $due : false,
+            'completed' => !empty($completed) ? $completed : false,
+        ));
+        $container['result']->setCode($container['response_code']::OK_CREATED);
+
+        return $container['result'];
     }
 
     /**
@@ -100,33 +113,39 @@ class Tasks extends ControllerAbstract
      */
     public function update($taskId)
     {
+        $container = $this->container;
+
         $task = $this->orm->find('\Architect\ORM\src\Task', $taskId);
 
         if (empty($task)) {
-            return new Result(array('message' => 'Context not found'), ResponseCode::ERROR_NOTFOUND);
+            $container['result']->setData(array('message' => 'Task not found'));
+            $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+            return $container['result'];
         }
 
         $contextId = $this->container['request']->get('context_id');
         $projectId = $this->container['request']->get('project_id');
 
+        $context = null;
+
         if (!empty($contextId)) {
             $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
-            $task->setContext($context);
-        } else {
-            $task->setContext(null);
         }
+
+        $task->setContext($context);
+
+        $project = null;
 
         if (!empty($projectId)) {
             $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
-            $task->setProject($project);
-        } else {
-            $task->setProject(null);
         }
 
-        $task->setTaskName($this->container['request']->get('task_name'));
+        $task->setProject($project);
 
-        $task->setDue($this->container['request']->get('due'));
-        $task->setCompleted($this->container['request']->get('completed'));
+        $task->setTaskName($container['request']->get('task_name'));
+
+        $task->setDue($container['request']->get('due'));
+        $task->setCompleted($container['request']->get('completed'));
         $this->orm->persist($task);
         $this->orm->flush();
 
@@ -135,7 +154,7 @@ class Tasks extends ControllerAbstract
         $context = $task->getContext();
         $project = $task->getProject();
 
-        return new Result(
+        $container['result']->setData(
             array(
                 'task_id' => $task->getId(),
                 'task_name' => $task->getTaskName(),
@@ -145,6 +164,8 @@ class Tasks extends ControllerAbstract
                 'completed' => !empty($completed) ? $completed : false,
             )
         );
+
+        return $container['result'];
     }
 
     /**
@@ -154,20 +175,26 @@ class Tasks extends ControllerAbstract
      */
     public function delete($taskId)
     {
+        $container = $this->container;
+
         $task = $this->orm->find('\Architect\ORM\src\Task', $taskId);
 
         if (empty($task)) {
-            return new Result(array('message' => 'Task not found'), ResponseCode::ERROR_NOTFOUND);
+            $container['result']->setData(array('message' => 'Task not found'));
+            $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
+            return $container['result'];
         }
 
         $this->orm->remove($task);
         $this->orm->flush();
 
-        return new Result(
+        $container['result']->setData(
             array(
                 'success' => true,
             )
         );
+
+        return $container['result'];
     }
 
     /**

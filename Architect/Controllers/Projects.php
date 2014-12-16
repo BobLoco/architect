@@ -88,12 +88,12 @@ class Projects extends ControllerAbstract
 
         $project->setProjectName($container['request']->get('project_name'));
         $project->setProjectDescription($container['request']->get('project_description'));
-        $context_id = $container['request']->get('context_id');
+        $contextId = $container['request']->get('context_id');
 
-        if (!empty($context_id)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
-        } else {
-            $context = null;
+        $context = null;
+
+        if (!empty($contextId)) {
+            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
         }
 
         $project->setContext($context);
@@ -135,12 +135,12 @@ class Projects extends ControllerAbstract
             return $container['result'];
         }
 
-        $context_id = $this->container['request']->get('context_id');
+        $contextId = $this->container['request']->get('context_id');
 
-        if (!empty($context_id)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $context_id);
-        } else {
-            $context = null;
+        $context = null;
+
+        if (!empty($contextId)) {
+            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
         }
 
         $project->setContext($context);
