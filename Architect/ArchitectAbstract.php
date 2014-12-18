@@ -1,6 +1,8 @@
 <?php
 namespace Architect;
 
+use \Pimple\Container;
+
 /**
  * Architect\ArchitectAbstract
  *
@@ -13,5 +15,14 @@ namespace Architect;
  */
 abstract class ArchitectAbstract
 {
+	protected $container;
 
+	/**
+	 * Constructor
+	 * @param Container $container The DI container
+	 */
+	public function __construct(Container $container)
+	{
+		$this->container = $container;
+	}
 }

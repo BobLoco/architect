@@ -3,6 +3,7 @@ namespace Architect\ORM;
 
 // use the Doctrine classes
 use \Doctrine\ORM\Tools\Setup;
+use \Pimple\Container;
 
 /**
  * Architect\ORM\EntityManager
@@ -20,17 +21,19 @@ class EntityManager extends \Architect\ArchitectAbstract implements EntityManage
     {
         // setup Doctrine
         $devMode = true;
-        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__.'/src'), $devMode);
+        $settings = Setup::createAnnotationMetadataConfiguration(array(__DIR__.'/src'), $devMode);
+
+        $config = $this->container['config']->getDbConfig();
 
         // connect to the DB
         $conn = array(
-            'driver' => Config::DB_DRIVER,
-            'user' => Config::DB_USER,
-            'password' => Config::DB_PASS,
-            'dbname' => Config::DB_DATABASE,
+            'driver' => $config['driver'],
+            'user' => $config['username'],
+            'password' => $config['password'],
+            'dbname' => $config['database'],
         );
 
         // get the entity manager
-        return \Doctrine\ORM\EntityManager::create($conn, $config);
+        return \Doctrine\ORM\EntityManager::create($conn, $settings);
     }
 }

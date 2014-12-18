@@ -4,17 +4,23 @@ namespace Architect\ORM;
 /**
  * Architect\ORM\Config
  *
+ * ORM example config file
+ *
  * @category ORM
  * @package Architect
  * @subpackage ORM
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
-class Config
+class Config implements ConfigInterface
 {
-    const DB_HOST = 'localhost';
-    const DB_USER = 'root';
-    const DB_PASS = 'yourpassword';
-    const DB_DATABASE = 'architect';
-
-    const DB_DRIVER = 'pdo_mysql';
+    public function getDbConfig()
+    {
+        return array(
+            'host' => 'localhost',
+            'username' => '',
+            'password' => '',
+            'database' => 'architect',
+            'driver' => 'pdo_mysql',
+        );
+    }
 }
