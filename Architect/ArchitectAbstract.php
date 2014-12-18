@@ -15,14 +15,14 @@ use \Pimple\Container;
  */
 abstract class ArchitectAbstract
 {
-	protected $container;
+    protected $container;
 
-	/**
-	 * Constructor
-	 * @param Container $container The DI container
-	 */
-	public function __construct(Container $container)
-	{
-		$this->container = $container;
-	}
+    /**
+     * Constructor
+     * @param Container $container The DI container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 }
