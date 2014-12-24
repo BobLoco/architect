@@ -15,8 +15,6 @@ use \Pimple\Container;
  */
 class Core extends ArchitectAbstract
 {
-    public static $app;
-
     /**
      * Constructor
      */
@@ -38,8 +36,6 @@ class Core extends ArchitectAbstract
     {
         // Handle any exceptions
         $this->container['slim']->error(function (\Exception $exception) {
-            var_dump($exception);
-
             $data = array(
                 'Message' => $exception->getMessage(),
                 'Code' => $exception->getCode(),

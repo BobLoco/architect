@@ -10,7 +10,8 @@ use Architect\Request;
 /**
  * Architect\Controllers\Project
  *
- * Projects controler
+ * Projects controller. Allows for reading, creating, updating and deleting
+ * of projects
  *
  * @category Architect
  * @package Controllers
@@ -21,8 +22,8 @@ class Projects extends ControllerAbstract
 {
     /**
      * Read a single project or list of projects
-     * @param  int $projectId
-     * @return array
+     * @param  int $projectId The ID of the project to be returned
+     * @return \Architect\Result The project(s) returned from the system
      */
     public function read($projectId = null)
     {
@@ -77,8 +78,8 @@ class Projects extends ControllerAbstract
     }
 
     /**
-     * Create a new project
-     * @return array
+     * Create a new project via POST
+     * @return \Architect\Result The project ID and name
      */
     public function create()
     {
@@ -86,22 +87,9 @@ class Projects extends ControllerAbstract
 
         $project = $container['project'];
 
-        $project->setProjectName($container['request']->get('project_name'));
-        $project->setProjectDescription($container['request']->get('project_description'));
-        $contextId = $container['request']->get('context_id');
+        $this->setProjectDetails($project);
 
-        $context = null;
-
-        if (!empty($contextId)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
-        }
-
-        $project->setContext($context);
         $project->setCreated();
-        $project->setUpdated();
-
-        $this->orm->persist($project);
-        $this->orm->flush();
 
         $container['slim']->response->headers->set(
             'Location',
@@ -118,9 +106,10 @@ class Projects extends ControllerAbstract
     }
 
     /**
-     * Update a project
-     * @param  int $projectId
-     * @return array
+     * Update a project by passing a JSON object via PUT
+     * Updates all fields for the project, so will null any not provided
+     * @param  int $projectId The ID of the project to update
+     * @return \Architect\Result The project name and ID
      */
     public function update($projectId)
     {
@@ -129,27 +118,13 @@ class Projects extends ControllerAbstract
         $project = $this->orm->find('\Architect\ORM\src\Project', $projectId);
 
         if (empty($project)) {
-            $container['result']->setData(array('message' => 'Context not found'));
+            $container['result']->setData(array('message' => 'Project not found'));
             $container['result']->setCode($container['response_code']::ERROR_NOTFOUND);
 
             return $container['result'];
         }
 
-        $contextId = $this->container['request']->get('context_id');
-
-        $context = null;
-
-        if (!empty($contextId)) {
-            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
-        }
-
-        $project->setContext($context);
-        $project->setUpdated();
-
-        $project->setProjectName($this->container['request']->get('project_name'));
-        $project->setProjectDescription($this->container['request']->get('project_description'));
-        $this->orm->persist($project);
-        $this->orm->flush();
+        $this->setProjectDetails($project);
 
         $container['result']->setData(
             array(
@@ -162,9 +137,9 @@ class Projects extends ControllerAbstract
     }
 
     /**
-     * Delete a project
-     * @param  int $projectId
-     * @return array
+     * Delete a project via DELETE
+     * @param  int $projectId The ID of the project to delete
+     * @return \Architect\Result Whether the deletion was successful
      */
     public function delete($projectId)
     {
@@ -186,5 +161,30 @@ class Projects extends ControllerAbstract
         ));
 
         return $container['result'];
+    }
+
+    /**
+     * Set the details of the project and commit them to the ORM
+     * @param \Architect\ORM\src\Project $project The project object to be updated
+     */
+    private function setProjectDetails(Project $project)
+    {
+        $contextId = $this->container['request']->get('context_id');
+
+        $context = null;
+
+        if (!empty($contextId)) {
+            $context = $this->orm->find('\Architect\ORM\src\Context', $contextId);
+        }
+
+        $project->setContext($context);
+        $project->setUpdated();
+
+        $project->setProjectName($this->container['request']->get('project_name'));
+        $project->setProjectDescription(
+            $this->container['request']->get('project_description')
+        );
+        $this->orm->persist($project);
+        $this->orm->flush();
     }
 }
