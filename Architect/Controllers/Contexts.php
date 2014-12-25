@@ -1,4 +1,7 @@
 <?php
+/**
+ * Contexts controller file
+ */
 namespace Architect\Controllers;
 
 use \Architect\Core;
@@ -9,7 +12,7 @@ use \Architect\Result;
 /**
  * Architect\Controllers\Context
  *
- * Contexts controler
+ * Contexts controller
  *
  * @category Controllers
  * @package Architect
