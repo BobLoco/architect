@@ -1,4 +1,9 @@
 <?php
+/**
+ * Controller abstract file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\Controllers;
 
 use Architect\ORM\EntityManager;
@@ -17,14 +22,27 @@ use Pimple\Container;
  */
 abstract class ControllerAbstract
 {
+    /**
+     * The ORM object
+     * @var \Architect\ORM\EntityManager
+     */
     protected $orm;
 
+    /**
+     * The request object
+     * @var \Architect\Request
+     */
     protected $request;
 
+    /**
+     * The dependency injection (DI) container
+     * @var \Pimple\Container
+     */
     protected $container;
 
     /**
      * Constructor
+     * @param \Pimple\Container $container The DI container
      * @throws \LogicException
      */
     public function __construct(Container $container)
@@ -42,7 +60,7 @@ abstract class ControllerAbstract
 
     /**
      * Process the tasks associated with the project or context
-     * @param  ArrayCollection $tasks
+     * @param  ArrayCollection $tasks The tasks to be sorted
      * @return array
      */
     protected function returnTasks($tasks)

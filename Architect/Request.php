@@ -1,22 +1,27 @@
 <?php
+/**
+ * Request object file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect;
 
 use \Architect\ORM\EntityManager;
 use \Architect\ResponseCode;
 use \Pimple\Container;
+use \RuntimeException;
 
 /**
  * Architect\Request
  *
- * Security and access layer
+ * A request object to provide data about the request, and security checks
  *
- * @category Request
+ * @category Core
  * @package Architect
  * @author Rob Lowcock <rob.lowcock@gmail.com>
  */
 class Request
 {
-
     /**
      * Master key
      */
@@ -36,6 +41,7 @@ class Request
 
     /**
      * Constructor
+     * @param \Pimple\Container $container The DI container
      */
     public function __construct(Container $container)
     {
@@ -63,7 +69,7 @@ class Request
         $params = $this->container['slim']->request()->params();
 
         if (empty($params['secret'])) {
-            throw new \RuntimeException('No application secret set', ResponseCode::ERROR_BADREQUEST);
+            throw new RuntimeException('No application secret set', ResponseCode::ERROR_BADREQUEST);
         }
 
         $secret = $params['secret'];
@@ -71,31 +77,31 @@ class Request
         if ($secret == self::MASTER) {
             $this->container['slim']->response()->header('Access-Control-Allow-Origin', '*');
             return true;
-        } else {
-            if (empty($params['app_id'])) {
-                throw new \RuntimeException('No application ID set', ResponseCode::ERROR_BADREQUEST);
-            }
-
-            $entityManager = $this->container['entity_manager'];
-            $orm = $entityManager->createManager();
-
-            $appId = (int) $params['app_id'];
-
-            $app = $orm->find('\Architect\ORM\src\App', $appId);
-
-            if (empty($app)) {
-                throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
-            }
-
-            $storedSecret = $app->getAppSecret();
-
-            if ($params['secret'] === $storedSecret) {
-                $this->container['slim']->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
-                return true;
-            } else {
-                throw new \RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
-            }
         }
+
+        if (empty($params['app_id'])) {
+            throw new RuntimeException('No application ID set', ResponseCode::ERROR_BADREQUEST);
+        }
+
+        $entityManager = $this->container['entity_manager'];
+        $orm = $entityManager->createManager();
+
+        $appId = (int) $params['app_id'];
+
+        $app = $orm->find('\Architect\ORM\src\App', $appId);
+
+        if (empty($app)) {
+            throw new RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
+        }
+
+        $storedSecret = $app->getAppSecret();
+
+        if ($params['secret'] === $storedSecret) {
+            $this->container['slim']->response()->header('Access-Control-Allow-Origin', $app->getAppUrl());
+            return true;
+        }
+
+        throw new RuntimeException('Invalid credentials', ResponseCode::ERROR_AUTH);
     }
 
     /**
@@ -107,8 +113,8 @@ class Request
     {
         if (in_array($param, array_keys($this->requestData))) {
             return $this->requestData[$param];
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

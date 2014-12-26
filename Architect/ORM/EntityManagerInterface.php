@@ -1,4 +1,9 @@
 <?php
+/**
+ * Interface for entity manager
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\ORM;
 
 /**
@@ -13,5 +18,9 @@ namespace Architect\ORM;
  */
 interface EntityManagerInterface
 {
+    /**
+     * Create the entity manager
+     * @return \Architect\ORM\EntityManager
+     */
     public function createManager();
 }

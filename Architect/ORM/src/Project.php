@@ -1,7 +1,13 @@
 <?php
+/**
+ * ORM project object definition file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\ORM\src;
 
 use \Doctrine\Common\Collections\ArrayCollection;
+use \DateTime;
 
 /**
  * Architect\ORM\src\Project
@@ -155,7 +161,7 @@ class Project
      */
     public function setUpdated()
     {
-        $this->updated = new \DateTime();
+        $this->updated = new DateTime();
     }
 
     /**
@@ -163,7 +169,7 @@ class Project
      */
     public function setCreated()
     {
-        $this->created = new \DateTime();
+        $this->created = new DateTime();
     }
 
     /**

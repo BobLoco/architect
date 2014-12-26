@@ -1,4 +1,9 @@
 <?php
+/**
+ * Core functions definition file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect;
 
 use \Slim\Slim;
@@ -7,7 +12,7 @@ use \Pimple\Container;
 /**
  * Architect\Core
  *
- * Defines and runs the core rendering Architect
+ * Core functions for Architect, such as routing
  *
  * @category Architect
  * @package Core
@@ -17,6 +22,7 @@ class Core extends ArchitectAbstract
 {
     /**
      * Constructor
+     * @param \Pimple\Container $container The DI container
      */
     public function __construct(Container $container)
     {

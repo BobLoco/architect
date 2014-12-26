@@ -1,4 +1,9 @@
 <?php
+/**
+ * Doctrine ORM Entity Manager
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\ORM;
 
 // use the Doctrine classes
@@ -17,6 +22,10 @@ use \Pimple\Container;
  */
 class EntityManager extends \Architect\ArchitectAbstract implements EntityManagerInterface
 {
+    /**
+     * Create the entity manager
+     * @return \Architect\ORM\EntityManager
+     */
     public function createManager()
     {
         // setup Doctrine

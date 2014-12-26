@@ -1,4 +1,9 @@
 <?php
+/**
+ * Context ORM object definition file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\ORM\src;
 
 use \Doctrine\Common\Collections\ArrayCollection;

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Config interface file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\ORM;
 
 /**
@@ -13,5 +18,8 @@ namespace Architect\ORM;
  */
 interface ConfigInterface
 {
+    /**
+     * Retrieve a database configuration
+     */
     public function getDbConfig();
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Project controller file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\Controllers;
 
 use Architect\Core;

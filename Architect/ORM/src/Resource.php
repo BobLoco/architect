@@ -1,4 +1,9 @@
 <?php
+/**
+ * Resource ORM object definiton file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\ORM\src;
 
 /**

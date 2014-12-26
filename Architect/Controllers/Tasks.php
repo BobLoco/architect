@@ -1,4 +1,9 @@
 <?php
+/**
+ * Tasks controller file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\Controllers;
 
 use Architect\Core;
@@ -20,8 +25,8 @@ class Tasks extends ControllerAbstract
 {
     /**
      * Read a single task or list of tasks
-     * @param  int $taskId
-     * @return array
+     * @param int $taskId The (optional) ID of the task requested
+     * @return \Architect\Result The task(s) requested
      */
     public function read($taskId = null)
     {
@@ -58,7 +63,7 @@ class Tasks extends ControllerAbstract
 
     /**
      * Create a new task
-     * @return array
+     * @return \Architect\Result The created task
      */
     public function create()
     {
@@ -90,8 +95,8 @@ class Tasks extends ControllerAbstract
 
     /**
      * Update a task
-     * @param  int $taskId
-     * @return array
+     * @param int $taskId The ID of the task to update
+     * @return \Architect\Result The updated task
      */
     public function update($taskId)
     {
@@ -124,8 +129,8 @@ class Tasks extends ControllerAbstract
 
     /**
      * Delete a task
-     * @param  int $taskId
-     * @return array
+     * @param  int $taskId The ID of the task to delete
+     * @return \Architect\Result Whether the deletion was successful
      */
     public function delete($taskId)
     {
@@ -175,8 +180,8 @@ class Tasks extends ControllerAbstract
 
     /**
      * Format a context to return
-     * @param  Architect\ORM\src\Context $context
-     * @return array
+     * @param  Architect\ORM\src\Context $context The context object to return
+     * @return array The context ID and name
      */
     private function returnContext($context)
     {
@@ -188,8 +193,8 @@ class Tasks extends ControllerAbstract
 
     /**
      * Format a project to return
-     * @param  Architect\ORM\src\Project $project
-     * @return array
+     * @param  Architect\ORM\src\Project $project The project object to return
+     * @return array The project ID and name
      */
     private function returnProject($project)
     {
@@ -201,7 +206,7 @@ class Tasks extends ControllerAbstract
 
     /**
      * Set the context of the task
-     * @param Architect\ORM\src\Task $task
+     * @param Architect\ORM\src\Task $task The task object
      */
     private function setContext($task)
     {
@@ -218,7 +223,8 @@ class Tasks extends ControllerAbstract
 
     /**
      * Set the project of the task
-     * @param Architect\ORM\src\Task $task
+     * @param int $projectId The ID of the project to associate
+     * @param Architect\ORM\src\Task $task The task object
      */
     private function setProject($projectId, $task)
     {

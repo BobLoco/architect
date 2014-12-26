@@ -1,5 +1,12 @@
 <?php
+/**
+ * ORM task object definition file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect\ORM\src;
+
+use \DateTime;
 
 /**
  * Architect\ORM\src\Task
@@ -142,14 +149,14 @@ class Task
 
     /**
      * Set the date the task is due
-     * @param string $completed
+     * @param string $due
      */
     public function setDue($due)
     {
+        $this->due = null;
+
         if (!empty($due) && $due !== 'false') {
-            $this->due = new \DateTime($due);
-        } else {
-            $this->due = null;
+            $this->due = new DateTime($due);
         }
     }
 
@@ -159,10 +166,10 @@ class Task
      */
     public function setCompleted($completed)
     {
+        $this->completed = null;
+
         if (!empty($completed) && $completed !== 'false') {
-            $this->completed = new \DateTime($completed);
-        } else {
-            $this->completed = null;
+            $this->completed = new DateTime($completed);
         }
     }
 

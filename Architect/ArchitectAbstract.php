@@ -1,4 +1,9 @@
 <?php
+/**
+ * Architect root abstract file
+ *
+ * @author Rob Lowcock <rob.lowcock@gmail.com>
+ */
 namespace Architect;
 
 use \Pimple\Container;
@@ -15,6 +20,10 @@ use \Pimple\Container;
  */
 abstract class ArchitectAbstract
 {
+    /**
+     * The dependency injection (DI) container
+     * @var \Pimple\Container
+     */
     protected $container;
 
     /**
